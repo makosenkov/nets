@@ -5,61 +5,63 @@ import mksnkv.nets.utilities.Utilities;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.*;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+;
 
 @RestController
 @RequestMapping("service")
 public class ServiceController {
 
-    private List<Map<String,String>> messages = new ArrayList<Map<String,String>>() {{
-        add(new HashMap<String,String>() {{put("id", "version"); put("text", Utilities.getVersion()); }});
-        add(new HashMap<String,String>() {{put("id", "interfaces"); put("text", foundInterfaces().toString()); }});
-    }};
-
-    private List<Map<String,String>> errors = new ArrayList<Map<String,String>>() {{
-        add(new HashMap<String,String>() {{put("id", "error"); put("text", "element not found"); }});
-        add(new HashMap<String,String>() {{put("id", "message"); put("text", "error message"); }});
-        add(new HashMap<String,String>() {{put("id", "interfaces"); put("text", "interface not found"); }});
+    private List<Map<String, String>> messages = new ArrayList<Map<String, String>>() {{
+        add(new HashMap<String, String>() {{
+            put("version", Utilities.getVersion());
+        }});
+        add(new HashMap<String, String>() {{
+            try {
+                put("devices", InetAddress.getLocalHost().getHostAddress());
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        }});
     }};
 
     @GetMapping("version")
-    public String getCurrentVersion() {
-        return "{version:" + Utilities.getVersion() + "}";
-    }
-
-    @GetMapping(":{version}/interfaces")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Map<String, String> getListOfInterfaces(@PathVariable String version) {
+    public Map<String, String> getCurrentVersion() {
         return messages.stream()
-                .filter(message -> message.get("id").equals("interfaces"))
+                .filter(message -> message.containsKey("version"))
                 .findFirst()
                 .orElseThrow(NotFoundException::new);
     }
 
-    private List<String> foundInterfaces(){
-        Enumeration<NetworkInterface> interfaces = null;
-        try {
-            interfaces = NetworkInterface.getNetworkInterfaces();
-        } catch (SocketException e){
-            e.printStackTrace();
-        }
-        List<String> listInterfaces = new ArrayList<>();
-        if (interfaces != null) {
-            for (NetworkInterface element : Collections.list(interfaces)) {
-                listInterfaces.add(element.getDisplayName());
+    @GetMapping("{version}/devices")
+    @ResponseStatus(value = HttpStatus.OK)
+    public Map<String, String> getListOfDevices(@PathVariable String version) {
+        return messages.stream()
+                .filter(message -> message.get("id").equals("devices"))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
+    }
+
+    private List<String> foundHosts(String subnet) {
+        int timeout = 1000;
+        List<String> hosts = new ArrayList<>();
+        for (int addressTail = 1; addressTail < 255; addressTail++) {
+            String host = subnet + "." + addressTail;
+            try {
+                if (InetAddress.getByName(host).isReachable(timeout)) {
+                    hosts.add(host);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        else throw new NotFoundException();
-        return listInterfaces;
-    }
-
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    private Map<String, String> sendErrorMessage(String type) {
-        return messages.stream()
-                .filter(error -> error.get("id").equals(type))
-                .findFirst()
-                .orElseThrow(NotFoundException::new);
+        return hosts;
     }
 }
