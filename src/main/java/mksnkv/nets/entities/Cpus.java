@@ -1,14 +1,26 @@
-package com.sample;
+package mksnkv.nets.entities;
 
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.*;
+
+@Entity
+@Table
+@EqualsAndHashCode(of = "id")
 public class Cpus {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private String name;
-  private long socketId;
+
+  @ManyToOne
+  private Sockets socketId;
   private long power;
-  private long maxRamFreqId;
-  private long vendorId;
+  @ManyToOne
+  private RamFreqs maxRamFreqId;
+  @ManyToOne
+  private CpuVendors vendorId;
 
 
   public long getId() {
@@ -29,11 +41,11 @@ public class Cpus {
   }
 
 
-  public long getSocketId() {
+  public Sockets getSocketId() {
     return socketId;
   }
 
-  public void setSocketId(long socketId) {
+  public void setSocketId(Sockets socketId) {
     this.socketId = socketId;
   }
 
@@ -47,20 +59,20 @@ public class Cpus {
   }
 
 
-  public long getMaxRamFreqId() {
+  public RamFreqs getMaxRamFreqId() {
     return maxRamFreqId;
   }
 
-  public void setMaxRamFreqId(long maxRamFreqId) {
+  public void setMaxRamFreqId(RamFreqs maxRamFreqId) {
     this.maxRamFreqId = maxRamFreqId;
   }
 
 
-  public long getVendorId() {
+  public CpuVendors getVendorId() {
     return vendorId;
   }
 
-  public void setVendorId(long vendorId) {
+  public void setVendorId(CpuVendors vendorId) {
     this.vendorId = vendorId;
   }
 

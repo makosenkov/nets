@@ -1,14 +1,24 @@
-package com.sample;
+package mksnkv.nets.entities;
 
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.*;
+
+@Entity
+@Table
+@EqualsAndHashCode(of = "id")
 public class Disks {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private String name;
   private String architecture;
-  private long interfaceId;
+  @ManyToOne
+  private DiskInterfaces interfaceId;
   private long power;
-  private long vendorId;
+  @ManyToOne
+  private DiskVendors vendorId;
 
 
   public long getId() {
@@ -38,11 +48,11 @@ public class Disks {
   }
 
 
-  public long getInterfaceId() {
+  public DiskInterfaces getInterfaceId() {
     return interfaceId;
   }
 
-  public void setInterfaceId(long interfaceId) {
+  public void setInterfaceId(DiskInterfaces interfaceId) {
     this.interfaceId = interfaceId;
   }
 
@@ -56,11 +66,11 @@ public class Disks {
   }
 
 
-  public long getVendorId() {
+  public DiskVendors getVendorId() {
     return vendorId;
   }
 
-  public void setVendorId(long vendorId) {
+  public void setVendorId(DiskVendors vendorId) {
     this.vendorId = vendorId;
   }
 

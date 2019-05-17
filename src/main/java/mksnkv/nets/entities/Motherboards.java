@@ -1,16 +1,36 @@
-package com.sample;
+package mksnkv.nets.entities;
 
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.*;
+
+@Entity
+@Table
+@EqualsAndHashCode(of = "id")
 public class Motherboards {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private String name;
-  private long diskInterfaceId;
-  private long ramVersionId;
-  private long maxRamFreqId;
-  private long socketId;
-  private long videoInterfaceId;
-  private long vendorId;
+
+  @ManyToOne
+  private DiskInterfaces diskInterfaceId;
+
+  @ManyToOne
+  private RamVersions ramVersionId;
+
+  @ManyToOne
+  private RamFreqs maxRamFreqId;
+
+  @ManyToOne
+  private Sockets socketId;
+
+  @ManyToOne
+  private VideoInterfaces videoInterfaceId;
+
+  @ManyToOne
+  private MotherboardVendors vendorId;
 
 
   public long getId() {
@@ -31,56 +51,56 @@ public class Motherboards {
   }
 
 
-  public long getDiskInterfaceId() {
+  public DiskInterfaces getDiskInterfaceId() {
     return diskInterfaceId;
   }
 
-  public void setDiskInterfaceId(long diskInterfaceId) {
+  public void setDiskInterfaceId(DiskInterfaces diskInterfaceId) {
     this.diskInterfaceId = diskInterfaceId;
   }
 
 
-  public long getRamVersionId() {
+  public RamVersions getRamVersionId() {
     return ramVersionId;
   }
 
-  public void setRamVersionId(long ramVersionId) {
+  public void setRamVersionId(RamVersions ramVersionId) {
     this.ramVersionId = ramVersionId;
   }
 
 
-  public long getMaxRamFreqId() {
+  public RamFreqs getMaxRamFreqId() {
     return maxRamFreqId;
   }
 
-  public void setMaxRamFreqId(long maxRamFreqId) {
+  public void setMaxRamFreqId(RamFreqs maxRamFreqId) {
     this.maxRamFreqId = maxRamFreqId;
   }
 
 
-  public long getSocketId() {
+  public Sockets getSocketId() {
     return socketId;
   }
 
-  public void setSocketId(long socketId) {
+  public void setSocketId(Sockets socketId) {
     this.socketId = socketId;
   }
 
 
-  public long getVideoInterfaceId() {
+  public VideoInterfaces getVideoInterfaceId() {
     return videoInterfaceId;
   }
 
-  public void setVideoInterfaceId(long videoInterfaceId) {
+  public void setVideoInterfaceId(VideoInterfaces videoInterfaceId) {
     this.videoInterfaceId = videoInterfaceId;
   }
 
 
-  public long getVendorId() {
+  public MotherboardVendors getVendorId() {
     return vendorId;
   }
 
-  public void setVendorId(long vendorId) {
+  public void setVendorId(MotherboardVendors vendorId) {
     this.vendorId = vendorId;
   }
 

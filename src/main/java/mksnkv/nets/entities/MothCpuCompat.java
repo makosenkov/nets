@@ -1,26 +1,34 @@
-package com.sample;
+package mksnkv.nets.entities;
 
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+@Table
+@EqualsAndHashCode(of = {"motherboardId", "cpuId"})
 public class MothCpuCompat {
 
-  private long motherboardId;
-  private long cpuId;
+  @ManyToMany
+  private Motherboards motherboardId;
+  @ManyToMany
+  private Cpus cpuId;
 
 
-  public long getMotherboardId() {
+  public Motherboards getMotherboardId() {
     return motherboardId;
   }
 
-  public void setMotherboardId(long motherboardId) {
+  public void setMotherboardId(Motherboards motherboardId) {
     this.motherboardId = motherboardId;
   }
 
 
-  public long getCpuId() {
+  public Cpus getCpuId() {
     return cpuId;
   }
 
-  public void setCpuId(long cpuId) {
+  public void setCpuId(Cpus cpuId) {
     this.cpuId = cpuId;
   }
 

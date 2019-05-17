@@ -1,14 +1,25 @@
-package com.sample;
+package mksnkv.nets.entities;
 
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.*;
+
+@Entity
+@Table
+@EqualsAndHashCode(of = "id")
 public class Rams {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private String name;
-  private long versionId;
+  @ManyToOne
+  private RamVersions versionId;
   private long power;
-  private long ramFreqId;
-  private long vendorId;
+  @ManyToOne
+  private RamFreqs ramFreqId;
+  @ManyToOne
+  private RamVendors vendorId;
 
 
   public long getId() {
@@ -29,11 +40,11 @@ public class Rams {
   }
 
 
-  public long getVersionId() {
+  public RamVersions getVersionId() {
     return versionId;
   }
 
-  public void setVersionId(long versionId) {
+  public void setVersionId(RamVersions versionId) {
     this.versionId = versionId;
   }
 
@@ -47,20 +58,20 @@ public class Rams {
   }
 
 
-  public long getRamFreqId() {
+  public RamFreqs getRamFreqId() {
     return ramFreqId;
   }
 
-  public void setRamFreqId(long ramFreqId) {
+  public void setRamFreqId(RamFreqs ramFreqId) {
     this.ramFreqId = ramFreqId;
   }
 
 
-  public long getVendorId() {
+  public RamVendors getVendorId() {
     return vendorId;
   }
 
-  public void setVendorId(long vendorId) {
+  public void setVendorId(RamVendors vendorId) {
     this.vendorId = vendorId;
   }
 

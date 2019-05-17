@@ -14,13 +14,14 @@ public class Configurations {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
-  private long motherboardId;
-  private long cpuId;
-  private long gpuId;
-  private long ramId;
-  private long diskId;
-  private long psuId;
-  private long caseId;
+
+  private Motherboards motherboardId;
+  private Cpus cpuId;
+  private Gpus gpuId;
+  private Rams ramId;
+  private Disks diskId;
+  private Psus psuId;
+  private Cases caseId;
 
 
   public long getId() {
@@ -31,66 +32,65 @@ public class Configurations {
     this.id = id;
   }
 
-
-  public long getMotherboardId() {
+  public Motherboards getMotherboardId() {
     return motherboardId;
   }
 
-  public void setMotherboardId(long motherboardId) {
+  public void setMotherboardId(Motherboards motherboardId) {
     this.motherboardId = motherboardId;
   }
 
 
-  public long getCpuId() {
+  public Cpus getCpuId() {
     return cpuId;
   }
 
-  public void setCpuId(long cpuId) {
+  public void setCpuId(Cpus cpuId) {
     this.cpuId = cpuId;
   }
 
 
-  public long getGpuId() {
+  public Gpus getGpuId() {
     return gpuId;
   }
 
-  public void setGpuId(long gpuId) {
+  public void setGpuId(Gpus gpuId) {
     this.gpuId = gpuId;
   }
 
 
-  public long getRamId() {
+  public Rams getRamId() {
     return ramId;
   }
 
-  public void setRamId(long ramId) {
+  public void setRamId(Rams ramId) {
     this.ramId = ramId;
   }
 
 
-  public long getDiskId() {
+  public Disks getDiskId() {
     return diskId;
   }
 
-  public void setDiskId(long diskId) {
+  public void setDiskId(Disks diskId) {
     this.diskId = diskId;
   }
 
 
-  public long getPsuId() {
+  public Psus getPsuId() {
     return psuId;
   }
 
-  public void setPsuId(long psuId) {
+  public void setPsuId(Psus psuId) {
     this.psuId = psuId;
   }
 
 
-  public long getCaseId() {
+  public Cases getCaseId() {
     return caseId;
   }
 
-  public void setCaseId(long caseId) {
+  public void setCaseId(Cases caseId) {
     this.caseId = caseId;
   }
 

@@ -1,11 +1,19 @@
-package com.sample;
+package mksnkv.nets.entities;
 
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.*;
+
+@Table
+@EqualsAndHashCode(of = "id")
 public class OrderItemCompat {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private long orderNumber;
-  private long itemId;
+  @ManyToMany
+  private Items itemId;
 
 
   public long getId() {
@@ -26,11 +34,11 @@ public class OrderItemCompat {
   }
 
 
-  public long getItemId() {
+  public Items getItemId() {
     return itemId;
   }
 
-  public void setItemId(long itemId) {
+  public void setItemId(Items itemId) {
     this.itemId = itemId;
   }
 

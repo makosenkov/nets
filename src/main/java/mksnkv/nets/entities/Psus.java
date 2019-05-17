@@ -1,12 +1,22 @@
-package com.sample;
+package mksnkv.nets.entities;
 
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.*;
+
+@Entity
+@Table
+@EqualsAndHashCode(of = "id")
 public class Psus {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private String name;
   private long powerRate;
-  private long vendorId;
+
+  @ManyToOne
+  private PsuVendors vendorId;
 
 
   public long getId() {
@@ -36,11 +46,11 @@ public class Psus {
   }
 
 
-  public long getVendorId() {
+  public PsuVendors getVendorId() {
     return vendorId;
   }
 
-  public void setVendorId(long vendorId) {
+  public void setVendorId(PsuVendors vendorId) {
     this.vendorId = vendorId;
   }
 

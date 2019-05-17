@@ -1,13 +1,28 @@
-package com.sample;
+package mksnkv.nets.entities;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+
+@Entity
+@Table
+@EqualsAndHashCode(of = "id")
 public class Gpus {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private String name;
-  private long videoInterfaceId;
+  @ManyToOne
+  private VideoInterfaces videoInterfaceId;
   private long power;
-  private long vendorId;
+
+  @ManyToOne
+  @Getter
+  @Setter
+  private GpuVendors vendorId;
 
 
   public long getId() {
@@ -28,11 +43,11 @@ public class Gpus {
   }
 
 
-  public long getVideoInterfaceId() {
+  public VideoInterfaces getVideoInterfaceId() {
     return videoInterfaceId;
   }
 
-  public void setVideoInterfaceId(long videoInterfaceId) {
+  public void setVideoInterfaceId(VideoInterfaces videoInterfaceId) {
     this.videoInterfaceId = videoInterfaceId;
   }
 
@@ -46,11 +61,11 @@ public class Gpus {
   }
 
 
-  public long getVendorId() {
+  public GpuVendors getVendorId() {
     return vendorId;
   }
 
-  public void setVendorId(long vendorId) {
+  public void setVendorId(GpuVendors vendorId) {
     this.vendorId = vendorId;
   }
 
