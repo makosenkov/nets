@@ -1,5 +1,6 @@
 package mksnkv.nets.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,11 +30,13 @@ public class DiskInterfaces {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "interfaceId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Disks> disks;
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "diskInterfaceId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Motherboards> motherboards;
 

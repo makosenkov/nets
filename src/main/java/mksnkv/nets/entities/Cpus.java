@@ -1,5 +1,7 @@
 package mksnkv.nets.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,6 +21,7 @@ public class Cpus {
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "item_id")
   private Items itemId;
@@ -30,23 +33,27 @@ public class Cpus {
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "socket_id")
   private Sockets socketId;
 
   @Getter
   @Setter
+  @JsonBackReference
   @Column(name = "power")
   private long power;
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "max_ram_freq_id")
   private RamFreqs maxRamFreqId;
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "vendor_id")
   private CpuVendors vendorId;
@@ -63,12 +70,14 @@ public class Cpus {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "cpuId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Configurations> configurations;
 
   @Setter
   @Getter
   @ManyToMany
+  @JsonBackReference
   @JoinTable(name = "moth_cpu_compat",
       joinColumns = @JoinColumn(name = "cpu_id"),
       inverseJoinColumns = @JoinColumn(name = "motherboard_id"))

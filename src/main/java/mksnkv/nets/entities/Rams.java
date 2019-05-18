@@ -1,5 +1,7 @@
 package mksnkv.nets.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,6 +21,7 @@ public class Rams {
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "item_id")
   private Items itemId;
@@ -30,6 +33,7 @@ public class Rams {
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "version_id")
   private RamVersions versionId;
@@ -41,12 +45,14 @@ public class Rams {
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ram_freq_id")
   private RamFreqs ramFreqId;
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "vendor_id")
   private RamVendors vendorId;
@@ -62,6 +68,7 @@ public class Rams {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "ramId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Configurations> configurations;
 

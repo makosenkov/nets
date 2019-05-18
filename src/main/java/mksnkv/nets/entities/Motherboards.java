@@ -1,5 +1,7 @@
 package mksnkv.nets.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,6 +21,7 @@ public class Motherboards {
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "item_id")
   private Items itemId;
@@ -30,36 +33,42 @@ public class Motherboards {
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "disk_interface_id")
   private DiskInterfaces diskInterfaceId;
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ram_version_id")
   private RamVersions ramVersionId;
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "max_ram_freq_id")
   private RamFreqs maxRamFreqId;
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "socket_id")
   private Sockets socketId;
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "video_interface_id")
   private VideoInterfaces videoInterfaceId;
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "vendor_id")
   private MotherboardVendors vendorId;
@@ -79,12 +88,14 @@ public class Motherboards {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "motherboardId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Configurations> configurations;
 
   @Setter
   @Getter
   @ManyToMany
+  @JsonManagedReference
   @JoinTable(name = "moth_cpu_compat",
       joinColumns = @JoinColumn(name = "motherboard_id"),
       inverseJoinColumns = @JoinColumn(name = "cpu_id"))

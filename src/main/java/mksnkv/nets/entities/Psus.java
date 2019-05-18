@@ -1,5 +1,7 @@
 package mksnkv.nets.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,6 +21,7 @@ public class Psus {
 
   @Getter
   @Setter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "item_id")
   private Items itemId;
@@ -35,6 +38,7 @@ public class Psus {
 
   @Setter
   @Getter
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "vendor_id")
   private PsuVendors vendorId;
@@ -48,6 +52,7 @@ public class Psus {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "psuId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Configurations> configurations;
 

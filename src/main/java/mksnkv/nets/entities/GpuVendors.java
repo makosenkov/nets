@@ -1,5 +1,6 @@
 package mksnkv.nets.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class GpuVendors {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "vendorId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Gpus> gpus;
 

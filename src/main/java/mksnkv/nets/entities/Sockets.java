@@ -1,5 +1,6 @@
 package mksnkv.nets.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class Sockets {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "socketId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Cpus> cpus;
 
@@ -43,6 +45,7 @@ public class Sockets {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "socketId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Motherboards> motherboards;
 

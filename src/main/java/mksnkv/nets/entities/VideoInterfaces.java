@@ -1,5 +1,6 @@
 package mksnkv.nets.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class VideoInterfaces {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "videoInterfaceId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Gpus> gpus;
 
@@ -43,6 +45,7 @@ public class VideoInterfaces {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "videoInterfaceId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Motherboards> motherboards;
 

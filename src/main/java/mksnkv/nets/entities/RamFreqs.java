@@ -1,5 +1,6 @@
 package mksnkv.nets.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class RamFreqs {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "maxRamFreqId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Motherboards> motherboards;
 
@@ -57,6 +59,7 @@ public class RamFreqs {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "ramFreqId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Rams> rams;
 

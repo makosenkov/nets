@@ -1,5 +1,6 @@
 package mksnkv.nets.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,47 +30,56 @@ public class Items {
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Configurations> configurations;
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Cpus> cpus;
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Gpus> gpus;
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Psus> psus;
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Rams> rams;
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Motherboards> motherboards;
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Cases> cases;
 
   @Setter
   @Getter
+  @JsonManagedReference
   @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Disks> disks;
 
   @Setter
   @Getter
   @ManyToMany
+  @JsonManagedReference
   @JoinTable(name = "order_item_compat",
       joinColumns = @JoinColumn(name = "item_id"),
       inverseJoinColumns = @JoinColumn(name = "order_id"))
