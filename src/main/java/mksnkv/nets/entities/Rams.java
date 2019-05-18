@@ -1,78 +1,68 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "rams")
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(of = "id")
 public class Rams {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "item_id")
+  private Items itemId;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
-  @ManyToOne
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "version_id")
   private RamVersions versionId;
+
+  @Getter
+  @Setter
+  @Column(name = "power")
   private long power;
-  @ManyToOne
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "ram_freq_id")
   private RamFreqs ramFreqId;
-  @ManyToOne
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "vendor_id")
   private RamVendors vendorId;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public Rams(String name, RamVersions versionId, long power, RamFreqs ramFreqId, RamVendors vendorId) {
     this.name = name;
-  }
-
-
-  public RamVersions getVersionId() {
-    return versionId;
-  }
-
-  public void setVersionId(RamVersions versionId) {
     this.versionId = versionId;
-  }
-
-
-  public long getPower() {
-    return power;
-  }
-
-  public void setPower(long power) {
     this.power = power;
-  }
-
-
-  public RamFreqs getRamFreqId() {
-    return ramFreqId;
-  }
-
-  public void setRamFreqId(RamFreqs ramFreqId) {
     this.ramFreqId = ramFreqId;
-  }
-
-
-  public RamVendors getVendorId() {
-    return vendorId;
-  }
-
-  public void setVendorId(RamVendors vendorId) {
     this.vendorId = vendorId;
+    this.configurations = new HashSet<>();
   }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "ramId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Configurations> configurations;
 
 }

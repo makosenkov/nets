@@ -1,57 +1,54 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "psus")
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(of = "id")
 public class Psus {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "item_id")
+  private Items itemId;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
+
+  @Getter
+  @Setter
+  @Column(name = "power_rate")
   private long powerRate;
 
-  @ManyToOne
+  @Setter
+  @Getter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "vendor_id")
   private PsuVendors vendorId;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public Psus(String name, long powerRate, PsuVendors vendorId) {
     this.name = name;
-  }
-
-
-  public long getPowerRate() {
-    return powerRate;
-  }
-
-  public void setPowerRate(long powerRate) {
     this.powerRate = powerRate;
-  }
-
-
-  public PsuVendors getVendorId() {
-    return vendorId;
-  }
-
-  public void setVendorId(PsuVendors vendorId) {
     this.vendorId = vendorId;
+    this.configurations = new HashSet<>();
   }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "psuId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Configurations> configurations;
 
 }

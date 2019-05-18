@@ -1,47 +1,91 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
-@ToString(of = {"id", "price", "name"})
+@Table(name = "items")
+@NoArgsConstructor
+@ToString(of = {"price", "name"})
 @EqualsAndHashCode(of = "id")
 public class Items {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @Column(name = "price")
   private long price;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
 
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Configurations> configurations;
 
-  public long getId() {
-    return id;
-  }
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Cpus> cpus;
 
-  public void setId(long id) {
-    this.id = id;
-  }
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Gpus> gpus;
 
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Psus> psus;
 
-  public long getPrice() {
-    return price;
-  }
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Rams> rams;
 
-  public void setPrice(long price) {
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Motherboards> motherboards;
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Cases> cases;
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Disks> disks;
+
+  @Setter
+  @Getter
+  @ManyToMany
+  @JoinTable(name = "order_item_compat",
+      joinColumns = @JoinColumn(name = "item_id"),
+      inverseJoinColumns = @JoinColumn(name = "order_id"))
+  private Set<Orders> orders;
+
+  public Items(long price, String name) {
     this.price = price;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
     this.name = name;
+    this.configurations = new HashSet<>();
+    this.cpus = new HashSet<>();
+    this.gpus = new HashSet<>();
+    this.psus = new HashSet<>();
+    this.rams = new HashSet<>();
+    this.motherboards = new HashSet<>();
+    this.cases = new HashSet<>();
+    this.disks = new HashSet<>();
+    this.orders = new HashSet<>();
   }
-
 }

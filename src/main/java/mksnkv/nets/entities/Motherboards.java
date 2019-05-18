@@ -1,107 +1,93 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "motherboards")
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(of = "id")
 public class Motherboards {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "item_id")
+  private Items itemId;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
 
-  @ManyToOne
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "disk_interface_id")
   private DiskInterfaces diskInterfaceId;
 
-  @ManyToOne
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "ram_version_id")
   private RamVersions ramVersionId;
 
-  @ManyToOne
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "max_ram_freq_id")
   private RamFreqs maxRamFreqId;
 
-  @ManyToOne
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "socket_id")
   private Sockets socketId;
 
-  @ManyToOne
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "video_interface_id")
   private VideoInterfaces videoInterfaceId;
 
-  @ManyToOne
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "vendor_id")
   private MotherboardVendors vendorId;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public Motherboards(String name, DiskInterfaces diskInterfaceId, RamVersions ramVersionId, RamFreqs maxRamFreqId,
+                      Sockets socketId, VideoInterfaces videoInterfaceId, MotherboardVendors vendorId) {
     this.name = name;
-  }
-
-
-  public DiskInterfaces getDiskInterfaceId() {
-    return diskInterfaceId;
-  }
-
-  public void setDiskInterfaceId(DiskInterfaces diskInterfaceId) {
     this.diskInterfaceId = diskInterfaceId;
-  }
-
-
-  public RamVersions getRamVersionId() {
-    return ramVersionId;
-  }
-
-  public void setRamVersionId(RamVersions ramVersionId) {
     this.ramVersionId = ramVersionId;
-  }
-
-
-  public RamFreqs getMaxRamFreqId() {
-    return maxRamFreqId;
-  }
-
-  public void setMaxRamFreqId(RamFreqs maxRamFreqId) {
     this.maxRamFreqId = maxRamFreqId;
-  }
-
-
-  public Sockets getSocketId() {
-    return socketId;
-  }
-
-  public void setSocketId(Sockets socketId) {
     this.socketId = socketId;
-  }
-
-
-  public VideoInterfaces getVideoInterfaceId() {
-    return videoInterfaceId;
-  }
-
-  public void setVideoInterfaceId(VideoInterfaces videoInterfaceId) {
     this.videoInterfaceId = videoInterfaceId;
-  }
-
-
-  public MotherboardVendors getVendorId() {
-    return vendorId;
-  }
-
-  public void setVendorId(MotherboardVendors vendorId) {
     this.vendorId = vendorId;
+    this.configurations = new HashSet<>();
+    this.cpus = new HashSet<>();
   }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "motherboardId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Configurations> configurations;
+
+  @Setter
+  @Getter
+  @ManyToMany
+  @JoinTable(name = "moth_cpu_compat",
+      joinColumns = @JoinColumn(name = "motherboard_id"),
+      inverseJoinColumns = @JoinColumn(name = "cpu_id"))
+  private Set<Cpus> cpus;
 
 }

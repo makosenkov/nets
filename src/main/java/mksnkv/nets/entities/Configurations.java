@@ -1,97 +1,76 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Table
-@ToString(of = {"id", "motherboardId", "cpuId", "gpuId", "ramId", "diskId", "psuId", "caseId"})
+@Table(name = "configurations")
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(of = "id")
 public class Configurations {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "motherboard_id")
   private Motherboards motherboardId;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "cpu_id")
   private Cpus cpuId;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "gpu_id")
   private Gpus gpuId;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "ram_id")
   private Rams ramId;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "disk_id")
   private Disks diskId;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "psu_id")
   private Psus psuId;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "case_id")
   private Cases caseId;
 
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "item_id")
+  private Items itemId;
 
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-  public Motherboards getMotherboardId() {
-    return motherboardId;
-  }
-
-  public void setMotherboardId(Motherboards motherboardId) {
+  public Configurations(Motherboards motherboardId, Cpus cpuId, Gpus gpuId, Rams ramId,
+                        Disks diskId, Psus psuId, Cases caseId) {
     this.motherboardId = motherboardId;
-  }
-
-
-  public Cpus getCpuId() {
-    return cpuId;
-  }
-
-  public void setCpuId(Cpus cpuId) {
     this.cpuId = cpuId;
-  }
-
-
-  public Gpus getGpuId() {
-    return gpuId;
-  }
-
-  public void setGpuId(Gpus gpuId) {
     this.gpuId = gpuId;
-  }
-
-
-  public Rams getRamId() {
-    return ramId;
-  }
-
-  public void setRamId(Rams ramId) {
     this.ramId = ramId;
-  }
-
-
-  public Disks getDiskId() {
-    return diskId;
-  }
-
-  public void setDiskId(Disks diskId) {
     this.diskId = diskId;
-  }
-
-
-  public Psus getPsuId() {
-    return psuId;
-  }
-
-  public void setPsuId(Psus psuId) {
     this.psuId = psuId;
-  }
-
-
-  public Cases getCaseId() {
-    return caseId;
-  }
-
-  public void setCaseId(Cases caseId) {
     this.caseId = caseId;
   }
-
 }

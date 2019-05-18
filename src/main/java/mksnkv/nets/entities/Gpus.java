@@ -1,72 +1,61 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "gpus")
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(of = "id")
 public class Gpus {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
-  private String name;
-  @ManyToOne
-  private VideoInterfaces videoInterfaceId;
-  private long power;
 
-  @ManyToOne
   @Getter
   @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "item_id")
+  private Items itemId;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
+  private String name;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "video_interface_id")
+  private VideoInterfaces videoInterfaceId;
+
+  @Getter
+  @Setter
+  @Column(name = "power")
+  private long power;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "vendor_id")
   private GpuVendors vendorId;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public Gpus(String name, VideoInterfaces videoInterfaceId, long power, GpuVendors vendorId) {
     this.name = name;
-  }
-
-
-  public VideoInterfaces getVideoInterfaceId() {
-    return videoInterfaceId;
-  }
-
-  public void setVideoInterfaceId(VideoInterfaces videoInterfaceId) {
     this.videoInterfaceId = videoInterfaceId;
-  }
-
-
-  public long getPower() {
-    return power;
-  }
-
-  public void setPower(long power) {
     this.power = power;
-  }
-
-
-  public GpuVendors getVendorId() {
-    return vendorId;
-  }
-
-  public void setVendorId(GpuVendors vendorId) {
     this.vendorId = vendorId;
+    this.configurations = new HashSet<>();
   }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "gpuId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Configurations> configurations;
 
 }

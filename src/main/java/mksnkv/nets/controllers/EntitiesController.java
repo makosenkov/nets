@@ -2,9 +2,9 @@ package mksnkv.nets.controllers;
 
 import mksnkv.nets.entities.Items;
 import mksnkv.nets.repos.ItemsRepo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -22,20 +22,4 @@ public class EntitiesController {
         return itemsRepo.findAll();
     }
 
-    @PostMapping("/items")
-    public Items create(@RequestBody Items items) {
-        return itemsRepo.save(items);
-    }
-
-    @PutMapping("/items{id}")
-    public Items update(@PathVariable("id") Items itemsFromDB,
-                        @RequestBody Items items) {
-        BeanUtils.copyProperties(items, itemsFromDB, "id");
-        return itemsRepo.save(itemsFromDB);
-    }
-
-    @DeleteMapping("/items{id}")
-    public void delete(@PathVariable("id") Items items) {
-        itemsRepo.delete(items);
-    }
 }

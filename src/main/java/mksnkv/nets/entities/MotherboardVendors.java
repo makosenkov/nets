@@ -1,35 +1,43 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "motherboard_vendors")
+@ToString
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class MotherboardVendors {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public MotherboardVendors(String name) {
     this.name = name;
+    this.motherboards = new HashSet<>();
+  }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "vendorId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Motherboards> motherboards;
+
+  public void addMotherboard(Motherboards motherboard) {
+    motherboards.add(motherboard);
+  }
+
+  public void removeMotherboard(Motherboards motherboard) {
+    motherboards.remove(motherboard);
   }
 
 }

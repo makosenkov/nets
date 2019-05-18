@@ -1,37 +1,41 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
-@ToString(of = {"id", "name"})
+@Table(name = "cases")
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(of = "id")
 public class Cases {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "item_id")
+  private Items itemId;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public Cases(String name) {
     this.name = name;
+    this.configurations = new HashSet<>();
   }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "caseId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Configurations> configurations;
 
 }

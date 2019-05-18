@@ -1,35 +1,37 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "ram_vendors")
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(of = "id")
 public class RamVendors {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
 
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "vendorId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Rams> rams;
 
-  public long getId() {
-    return id;
+  public void addRam(Rams ram) {
+    rams.add(ram);
   }
 
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
+  public void removeRam(Rams ram) {
+    rams.remove(ram);
   }
 
 }

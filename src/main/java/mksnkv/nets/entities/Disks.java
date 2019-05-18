@@ -1,77 +1,66 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "disks")
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(of = "id")
 public class Disks {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "item_id")
+  private Items itemId;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
+
+  @Getter
+  @Setter
+  @Column(name = "architecture")
   private String architecture;
-  @ManyToOne
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "interface_id")
   private DiskInterfaces interfaceId;
+
+  @Getter
+  @Setter
+  @Column(name = "power")
   private long power;
-  @ManyToOne
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "vendor_id")
   private DiskVendors vendorId;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public Disks(String name, String architecture, DiskInterfaces interfaceId, long power, DiskVendors vendorId) {
     this.name = name;
-  }
-
-
-  public String getArchitecture() {
-    return architecture;
-  }
-
-  public void setArchitecture(String architecture) {
     this.architecture = architecture;
-  }
-
-
-  public DiskInterfaces getInterfaceId() {
-    return interfaceId;
-  }
-
-  public void setInterfaceId(DiskInterfaces interfaceId) {
     this.interfaceId = interfaceId;
-  }
-
-
-  public long getPower() {
-    return power;
-  }
-
-  public void setPower(long power) {
     this.power = power;
-  }
-
-
-  public DiskVendors getVendorId() {
-    return vendorId;
-  }
-
-  public void setVendorId(DiskVendors vendorId) {
     this.vendorId = vendorId;
+    this.configurations = new HashSet<>();
   }
 
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "diskId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Configurations> configurations;
 }

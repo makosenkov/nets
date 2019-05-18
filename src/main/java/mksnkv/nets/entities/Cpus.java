@@ -1,79 +1,76 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "cpus")
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(of = "id")
 public class Cpus {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "item_id")
+  private Items itemId;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
 
-  @ManyToOne
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "socket_id")
   private Sockets socketId;
+
+  @Getter
+  @Setter
+  @Column(name = "power")
   private long power;
-  @ManyToOne
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "max_ram_freq_id")
   private RamFreqs maxRamFreqId;
-  @ManyToOne
+
+  @Getter
+  @Setter
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "vendor_id")
   private CpuVendors vendorId;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public Cpus(String name, Sockets socketId, long power, RamFreqs maxRamFreqId, CpuVendors vendorId) {
     this.name = name;
-  }
-
-
-  public Sockets getSocketId() {
-    return socketId;
-  }
-
-  public void setSocketId(Sockets socketId) {
     this.socketId = socketId;
-  }
-
-
-  public long getPower() {
-    return power;
-  }
-
-  public void setPower(long power) {
     this.power = power;
-  }
-
-
-  public RamFreqs getMaxRamFreqId() {
-    return maxRamFreqId;
-  }
-
-  public void setMaxRamFreqId(RamFreqs maxRamFreqId) {
     this.maxRamFreqId = maxRamFreqId;
-  }
-
-
-  public CpuVendors getVendorId() {
-    return vendorId;
-  }
-
-  public void setVendorId(CpuVendors vendorId) {
     this.vendorId = vendorId;
+    this.configurations = new HashSet<>();
+    this.motherboards = new HashSet<>();
   }
 
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "cpuId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Configurations> configurations;
+
+  @Setter
+  @Getter
+  @ManyToMany
+  @JoinTable(name = "moth_cpu_compat",
+      joinColumns = @JoinColumn(name = "cpu_id"),
+      inverseJoinColumns = @JoinColumn(name = "motherboard_id"))
+  private Set<Motherboards> motherboards;
 }

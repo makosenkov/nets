@@ -1,8 +1,12 @@
 package mksnkv.nets.entities;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table
@@ -10,46 +14,30 @@ import javax.persistence.*;
 public class Orders {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
-  private long number;
+
+  @Getter
+  @Setter
+  @Column(name = "totalPrice")
   private long totalPrice;
+
+  @Getter
+  @Setter
+  @Column(name = "address")
   private String address;
 
+  @Setter
+  @Getter
+  @ManyToMany
+  @JoinTable(name = "order_item_compat",
+      joinColumns = @JoinColumn(name = "order_id"),
+      inverseJoinColumns = @JoinColumn(name = "item_id"))
+  private Set<Items> items;
 
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public long getNumber() {
-    return number;
-  }
-
-  public void setNumber(long number) {
-    this.number = number;
-  }
-
-
-  public long getTotalPrice() {
-    return totalPrice;
-  }
-
-  public void setTotalPrice(long totalPrice) {
+  public Orders(long totalPrice, String address) {
     this.totalPrice = totalPrice;
-  }
-
-
-  public String getAddress() {
-    return address;
-  }
-
-  public void setAddress(String address) {
     this.address = address;
+    this.items = new HashSet<>();
   }
-
 }

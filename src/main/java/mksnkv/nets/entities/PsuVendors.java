@@ -1,35 +1,43 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "psu_vendors")
+@ToString
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class PsuVendors {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Setter
+  @Getter
+  @Column(name = "name")
   private String name;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public PsuVendors(String name) {
     this.name = name;
+    this.psus = new HashSet<>();
+  }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "vendorId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Psus> psus;
+
+  public void addСpu(Psus psu) {
+    psus.add(psu);
+  }
+
+  public void removeСpu(Psus psu) {
+    psus.remove(psu);
   }
 
 }

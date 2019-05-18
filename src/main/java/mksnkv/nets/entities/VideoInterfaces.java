@@ -1,35 +1,57 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "video_interfaces")
+@ToString
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class VideoInterfaces {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public VideoInterfaces(String name, Set<Gpus> gpus) {
     this.name = name;
+    this.gpus = gpus;
+    this.motherboards = new HashSet<>();
+  }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "videoInterfaceId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Gpus> gpus;
+
+  public void addGpu(Gpus gpu) {
+    gpus.add(gpu);
+  }
+
+  public void removeGpu(Gpus gpu) {
+    gpus.remove(gpu);
+  }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "videoInterfaceId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Motherboards> motherboards;
+
+  public void addMotherboard(Motherboards motherboard) {
+    motherboards.add(motherboard);
+  }
+
+  public void removeMotherboard(Motherboards motherboard) {
+    motherboards.remove(motherboard);
   }
 
 }

@@ -1,35 +1,57 @@
 package mksnkv.nets.entities;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "sockets")
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(of = "id")
 public class Sockets {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
   private String name;
 
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
+  public Sockets(String name) {
     this.name = name;
+    this.cpus = new HashSet<>();
+    this.motherboards = new HashSet<>();
+  }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "socketId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Cpus> cpus;
+
+  public void addСpu(Cpus cpu) {
+    cpus.add(cpu);
+  }
+
+  public void removeСpu(Cpus cpu) {
+    cpus.remove(cpu);
+  }
+
+  @Setter
+  @Getter
+  @OneToMany(mappedBy = "socketId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Motherboards> motherboards;
+
+  public void addMotherboard(Motherboards motherboard) {
+    motherboards.add(motherboard);
+  }
+
+  public void removeMotherboard(Motherboards motherboard) {
+    motherboards.remove(motherboard);
   }
 
 }
