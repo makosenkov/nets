@@ -32,5 +32,6 @@ dependencies {
 	compile('javax.xml.bind:jaxb-api')
 	compile('com.sun.xml.bind:jaxb-core:2.3.0.1')
 	compile('com.sun.xml.bind:jaxb-impl:2.3.2')
+	compile('com.github.javafaker:javafaker:0.18')
 	testCompile("junit:junit")
 }

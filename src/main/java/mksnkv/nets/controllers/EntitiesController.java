@@ -3,7 +3,9 @@ package mksnkv.nets.controllers;
 import lombok.AllArgsConstructor;
 import mksnkv.nets.entities.Cpus;
 import mksnkv.nets.entities.Items;
+import mksnkv.nets.entities.Rams;
 import mksnkv.nets.repos.*;
+import mksnkv.nets.utilities.Generator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,6 +44,57 @@ public class EntitiesController {
     @GetMapping("/cpus")
     public List<Cpus> listCpus() {
         return cpusRepo.findAll();
+    }
+
+    @GetMapping("/generator")
+    public List<Rams> listRams() {
+        generate();
+        return ramsRepo.findAll();
+    }
+
+    private void generate() {
+        Generator generator = new Generator(itemsRepo,
+            cpuVendorsRepo,
+            gpuVendorsRepo,
+            ramVendorsRepo,
+            ramVersionsRepo,
+            ramFreqsRepo,
+            psuVendorsRepo,
+            diskVendorsRepo,
+            socketsRepo,
+            videoInterfacesRepo,
+            motherboardsRepo,
+            cpusRepo,
+            gpusRepo,
+            psusRepo,
+            ramsRepo,
+            casesRepo,
+            disksRepo,
+            configurationsRepo,
+            ordersRepo,
+            10,
+            11,
+            10,
+            12,
+            12,
+            12,
+            12,
+            12,
+            1,
+            1,
+            1,
+            1,
+            15,
+            15,
+            15,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2
+        );
+        generator.generate();
     }
 
 }

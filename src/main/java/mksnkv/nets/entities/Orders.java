@@ -3,6 +3,7 @@ package mksnkv.nets.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,7 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "orders")
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Orders {
 
@@ -20,7 +22,7 @@ public class Orders {
 
   @Getter
   @Setter
-  @Column(name = "totalPrice")
+  @Column(name = "total_price")
   private long totalPrice;
 
   @Getter
