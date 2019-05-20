@@ -3,7 +3,6 @@ package mksnkv.nets.controllers;
 import lombok.AllArgsConstructor;
 import mksnkv.nets.entities.Cpus;
 import mksnkv.nets.entities.Items;
-import mksnkv.nets.entities.Rams;
 import mksnkv.nets.repos.*;
 import mksnkv.nets.utilities.Generator;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +22,11 @@ public class EntitiesController {
     private final RamFreqsRepo ramFreqsRepo;
     private final PsuVendorsRepo psuVendorsRepo;
     private final DiskVendorsRepo diskVendorsRepo;
+    private final DiskInterfacesRepo diskInterfacesRepo;
     private final SocketsRepo socketsRepo;
     private final VideoInterfacesRepo videoInterfacesRepo;
     private final MotherboardsRepo motherboardsRepo;
+    private final MotherboardVendorsRepo motherboardVendorsRepo;
     private final CpusRepo cpusRepo;
     private final GpusRepo gpusRepo;
     private final PsusRepo psusRepo;
@@ -47,9 +48,9 @@ public class EntitiesController {
     }
 
     @GetMapping("/generator")
-    public List<Rams> listRams() {
+    public String listRams() {
         generate();
-        return ramsRepo.findAll();
+        return "see results in /{table} URL";
     }
 
     private void generate() {
@@ -61,9 +62,11 @@ public class EntitiesController {
             ramFreqsRepo,
             psuVendorsRepo,
             diskVendorsRepo,
+            diskInterfacesRepo,
             socketsRepo,
             videoInterfacesRepo,
             motherboardsRepo,
+            motherboardVendorsRepo,
             cpusRepo,
             gpusRepo,
             psusRepo,
@@ -72,26 +75,26 @@ public class EntitiesController {
             disksRepo,
             configurationsRepo,
             ordersRepo,
+            1000,
+            1100,
+            4500,
+            4500,
+            1200,
+            1200,
+            1200,
+            1200,
+            1000,
+            100,
+            100,
+            100,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
             10,
-            11,
             10,
-            12,
-            12,
-            12,
-            12,
-            12,
-            1,
-            1,
-            1,
-            1,
-            15,
-            15,
-            15,
-            1,
-            1,
-            1,
-            2,
-            2,
             2
         );
         generator.generate();

@@ -18,7 +18,7 @@ public class EntitiesGenerator {
 
     public RamFreqs generateRamFreq() {
         RamFreqs entity = new RamFreqs();
-        entity.setName(random.nextInt(4000) + 200);
+        entity.setName(random.nextInt(4000)+200);
         return entity;
     }
 
@@ -73,7 +73,7 @@ public class EntitiesGenerator {
 
     public VideoInterfaces generateVideoInterface() {
         VideoInterfaces entity = new VideoInterfaces();
-        entity.setName(faker.app().name());
+        entity.setName(faker.app().name() + random.nextInt(10));
         return entity;
     }
 
@@ -85,14 +85,14 @@ public class EntitiesGenerator {
 
     public Cpus generateCpu() {
         Cpus entity = new Cpus();
-        entity.setName(faker.cat().name());
+        entity.setName(faker.cat().name() + random.nextInt(10));
         entity.setPower(random.nextInt(100)+50);
         return entity;
     }
 
     public Gpus generateGpu() {
         Gpus entity = new Gpus();
-        entity.setName(faker.dog().name());
+        entity.setName(faker.dog().name() + random.nextInt(10));
         entity.setPower(random.nextInt(500)+200);
         return entity;
     }
@@ -106,7 +106,7 @@ public class EntitiesGenerator {
 
     public Disks generateDisk() {
         Disks entity = new Disks();
-        entity.setName(faker.beer().name());
+        entity.setName(faker.beer().name() + random.nextInt(10));
         entity.setPower(random.nextInt(300)+200);
         entity.setArchitecture(faker.beer().style());
         return entity;
@@ -114,7 +114,7 @@ public class EntitiesGenerator {
 
     public Rams generateRam() {
         Rams entity = new Rams();
-        entity.setName(faker.esports().game());
+        entity.setName(faker.esports().game() + random.nextInt(20));
         entity.setPower(random.nextInt(50)+10);
         return entity;
     }
@@ -125,13 +125,13 @@ public class EntitiesGenerator {
 
     public Motherboards generateMotherboard() {
         Motherboards entity = new Motherboards();
-        entity.setName(faker.space().galaxy());
+        entity.setName(faker.space().galaxy() + random.nextInt(10));
         return entity;
     }
 
     public Items generateItem() {
         Items entity = new Items();
-        entity.setName(faker.funnyName().name());
+        entity.setName(faker.funnyName().name() + random.nextInt(10));
         return entity;
     }
 
