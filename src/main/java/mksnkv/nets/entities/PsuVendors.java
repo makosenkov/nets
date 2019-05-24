@@ -34,11 +34,11 @@ public class PsuVendors {
   @OneToMany(mappedBy = "vendorId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Psus> psus;
 
-  public void addСpu(Psus psu) {
+  public void addPsu(Psus psu) {
     psus.add(psu);
   }
 
-  public void removeСpu(Psus psu) {
+  public void removePsu(Psus psu) {
     psus.remove(psu);
   }
 

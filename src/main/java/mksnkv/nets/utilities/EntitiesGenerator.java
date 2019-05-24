@@ -3,6 +3,7 @@ package mksnkv.nets.utilities;
 import com.github.javafaker.Faker;
 import mksnkv.nets.entities.*;
 
+import java.util.HashSet;
 import java.util.Random;
 
 public class EntitiesGenerator {
@@ -10,9 +11,9 @@ public class EntitiesGenerator {
     private final Random random = new Random();
     private Faker faker = new Faker();
     
-    public RamVersions generateRamVersion(int i) {
+    public RamVersions generateRamVersion() {
         RamVersions entity = new RamVersions();
-        entity.setName(String.format("DDR%d", i));
+        entity.setName(String.format("DDR%d", random.nextInt(5000)));
         return entity;
     }
 
@@ -28,9 +29,9 @@ public class EntitiesGenerator {
         return entity;
     }
 
-    public Sockets generateSocket(int i) {
+    public Sockets generateSocket() {
         Sockets entity = new Sockets();
-        entity.setName(String.format("Socket%d", i));
+        entity.setName(String.format("Socket%d", random.nextInt(5000)));
         return entity;
     }
 
@@ -68,6 +69,7 @@ public class EntitiesGenerator {
     public Cases generateCase() {
         Cases entity = new Cases();
         entity.setName(faker.rockBand().name());
+        entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
@@ -77,9 +79,9 @@ public class EntitiesGenerator {
         return entity;
     }
 
-    public DiskInterfaces generateDiskInterface(int i) {
+    public DiskInterfaces generateDiskInterface() {
         DiskInterfaces entity = new DiskInterfaces();
-        entity.setName(String.format("SATA%d", i));
+        entity.setName(String.format("SATA%d", random.nextInt(3000)));
         return entity;
     }
 
@@ -87,6 +89,8 @@ public class EntitiesGenerator {
         Cpus entity = new Cpus();
         entity.setName(faker.cat().name() + random.nextInt(10));
         entity.setPower(random.nextInt(100)+50);
+        entity.setMotherboards(new HashSet<>());
+        entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
@@ -94,6 +98,7 @@ public class EntitiesGenerator {
         Gpus entity = new Gpus();
         entity.setName(faker.dog().name() + random.nextInt(10));
         entity.setPower(random.nextInt(500)+200);
+        entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
@@ -101,6 +106,7 @@ public class EntitiesGenerator {
         Psus entity = new Psus();
         entity.setName(faker.beer().name());
         entity.setPowerRate(random.nextInt(1500)+500);
+        entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
@@ -109,6 +115,7 @@ public class EntitiesGenerator {
         entity.setName(faker.beer().name() + random.nextInt(10));
         entity.setPower(random.nextInt(300)+200);
         entity.setArchitecture(faker.beer().style());
+        entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
@@ -116,28 +123,34 @@ public class EntitiesGenerator {
         Rams entity = new Rams();
         entity.setName(faker.esports().game() + random.nextInt(20));
         entity.setPower(random.nextInt(50)+10);
+        entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
-    public Configurations generateConfiguration() {
+    Configurations generateConfiguration() {
         return new Configurations();
     }
 
-    public Motherboards generateMotherboard() {
+    Motherboards generateMotherboard() {
         Motherboards entity = new Motherboards();
         entity.setName(faker.space().galaxy() + random.nextInt(10));
+        entity.setCpus(new HashSet<>());
+        entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
-    public Items generateItem() {
-        Items entity = new Items();
-        entity.setName(faker.funnyName().name() + random.nextInt(10));
-        return entity;
+    Items generateItem() {
+        return new Items(
+            random.nextInt(25000),
+            faker.witcher().monster() + random.nextInt(1000),
+            random.nextBoolean()
+        );
     }
 
     public Orders generateOrder() {
         Orders entity = new Orders();
         entity.setAddress(faker.address().fullAddress());
+        entity.setItems(new HashSet<>());
         return entity;
     }
 }

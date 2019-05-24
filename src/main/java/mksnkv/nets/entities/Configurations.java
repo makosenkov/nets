@@ -16,6 +16,13 @@ public class Configurations {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
+  @OneToOne
+  @MapsId
+  @Getter
+  @Setter
+  @JsonBackReference
+  private Items item;
+
   @Getter
   @Setter
   @JsonBackReference
@@ -64,13 +71,6 @@ public class Configurations {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "case_id")
   private Cases caseId;
-
-  @Getter
-  @Setter
-  @JsonBackReference
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "item_id")
-  private Items itemId;
 
   public Configurations(Motherboards motherboardId, Cpus cpuId, Gpus gpuId, Rams ramId,
                         Disks diskId, Psus psuId, Cases caseId) {

@@ -21,15 +21,15 @@ public class Cpus {
 
   @Getter
   @Setter
-  @JsonBackReference
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "item_id")
-  private Items itemId;
-
-  @Getter
-  @Setter
   @Column(name = "name")
   private String name;
+
+  @OneToOne
+  @MapsId
+  @Getter
+  @Setter
+  @JsonBackReference
+  private Items item;
 
   @Getter
   @Setter
@@ -74,6 +74,14 @@ public class Cpus {
   @OneToMany(mappedBy = "cpuId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Configurations> configurations;
 
+  public void addConfiguration(Configurations configuration) {
+    configurations.add(configuration);
+  }
+
+  public void removeConfiguration(Configurations configuration) {
+    configurations.remove(configuration);
+  }
+
   @Setter
   @Getter
   @ManyToMany
@@ -82,4 +90,12 @@ public class Cpus {
       joinColumns = @JoinColumn(name = "cpu_id"),
       inverseJoinColumns = @JoinColumn(name = "motherboard_id"))
   private Set<Motherboards> motherboards;
+
+  public void addMotherboard(Motherboards motherboard) {
+    motherboards.add(motherboard);
+  }
+
+  public void removeMotherboard(Motherboards motherboard) {
+    motherboards.remove(motherboard);
+  }
 }

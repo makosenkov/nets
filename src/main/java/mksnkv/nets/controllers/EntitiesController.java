@@ -2,9 +2,11 @@ package mksnkv.nets.controllers;
 
 import lombok.AllArgsConstructor;
 import mksnkv.nets.entities.Cpus;
-import mksnkv.nets.entities.Items;
+import mksnkv.nets.entities.GpuVendors;
+import mksnkv.nets.entities.Rams;
 import mksnkv.nets.repos.*;
 import mksnkv.nets.utilities.Generator;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,6 +14,7 @@ import java.util.List;
 
 @RestController()
 @AllArgsConstructor
+@Configuration
 public class EntitiesController {
 
     private final ItemsRepo itemsRepo;
@@ -37,9 +40,9 @@ public class EntitiesController {
     private final OrdersRepo ordersRepo;
 
 
-    @GetMapping("/items")
-    public List<Items> listItems() {
-        return itemsRepo.findAll();
+    @GetMapping("/rams")
+    public List<Rams> listRams() {
+        return ramsRepo.findAll();
     }
 
     @GetMapping("/cpus")
@@ -47,13 +50,18 @@ public class EntitiesController {
         return cpusRepo.findAll();
     }
 
-    @GetMapping("/generator")
-    public String listRams() {
-        generate();
-        return "see results in /{table} URL";
+    @GetMapping("/gpuvendors")
+    public List<GpuVendors> listGpuVendors() {
+        return gpuVendorsRepo.findAll();
     }
 
-    private void generate() {
+    @GetMapping("/generator")
+    public String generateData() {
+        generate();
+        return "method generate() was called, wait several minutes to see the data";
+    }
+
+    public void generate() {
         Generator generator = new Generator(itemsRepo,
             cpuVendorsRepo,
             gpuVendorsRepo,
@@ -75,27 +83,26 @@ public class EntitiesController {
             disksRepo,
             configurationsRepo,
             ordersRepo,
-            1000,
-            1100,
-            4500,
-            4500,
-            1200,
-            1200,
-            1200,
-            1200,
-            1000,
+            110,
+            150,
+            200,
+            120,
+            120,
+            120,
             100,
             100,
-            100,
-            50,
-            50,
-            50,
-            50,
-            50,
-            50,
             10,
             10,
-            2
+            10,
+            50,
+            50,
+            5,
+            50,
+            50,
+            5,
+            10,
+            20,
+            20
         );
         generator.generate();
     }

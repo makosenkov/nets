@@ -21,13 +21,6 @@ public class Disks {
 
   @Getter
   @Setter
-  @JsonBackReference
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "item_id")
-  private Items itemId;
-
-  @Getter
-  @Setter
   @Column(name = "name")
   private String name;
 
@@ -35,6 +28,13 @@ public class Disks {
   @Setter
   @Column(name = "architecture")
   private String architecture;
+
+  @OneToOne
+  @MapsId
+  @Getter
+  @Setter
+  @JsonBackReference
+  private Items item;
 
   @Getter
   @Setter
@@ -69,4 +69,12 @@ public class Disks {
   @JsonManagedReference
   @OneToMany(mappedBy = "diskId", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Configurations> configurations;
+
+  public void addConfiguration(Configurations configuration) {
+    configurations.add(configuration);
+  }
+
+  public void removeConfiguration(Configurations configuration) {
+    configurations.remove(configuration);
+  }
 }

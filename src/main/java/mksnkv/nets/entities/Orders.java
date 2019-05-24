@@ -1,6 +1,6 @@
 package mksnkv.nets.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,11 +33,19 @@ public class Orders {
   @Setter
   @Getter
   @ManyToMany
-  @JsonBackReference
+  @JsonManagedReference
   @JoinTable(name = "order_item_compat",
       joinColumns = @JoinColumn(name = "order_id"),
       inverseJoinColumns = @JoinColumn(name = "item_id"))
   private Set<Items> items;
+
+  public void addItem(Items item) {
+    items.add(item);
+  }
+
+  public void removeItem(Items item) {
+    items.remove(item);
+  }
 
   public Orders(long totalPrice, String address) {
     this.totalPrice = totalPrice;
