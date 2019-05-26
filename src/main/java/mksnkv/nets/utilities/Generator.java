@@ -1,12 +1,16 @@
 package mksnkv.nets.utilities;
 
+import lombok.AllArgsConstructor;
 import mksnkv.nets.entities.*;
 import mksnkv.nets.repos.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+
+@AllArgsConstructor
 public class Generator {
 
     private final ItemsRepo itemsRepo;
@@ -54,11 +58,10 @@ public class Generator {
 
     private final EntitiesGenerator entityGenerator = new EntitiesGenerator();
     private final Random random = new Random();
-    private static final int batchSize = 500;
+
     private List<VideoInterfaces> videoInterfacesList;
     private List<Sockets> socketsList;
     private List<RamFreqs> ramFreqsList;
-
     private List<RamVersions> ramVersionsList;
     private List<Psus> psusList;
     private List<RamVendors> ramVendorsList;
@@ -75,6 +78,9 @@ public class Generator {
     private List<MotherboardVendors> motherboardVendorsList;
     private List<Motherboards> motherboardsList;
     private List<Items> itemsList;
+    private List<Configurations> configurationsList;
+    private List<Orders> ordersList;
+
 
     public Generator(ItemsRepo itemsRepo,
                      CpuVendorsRepo cpuVendorsRepo,
@@ -97,26 +103,7 @@ public class Generator {
                      DisksRepo disksRepo,
                      ConfigurationsRepo configurationsRepo,
                      OrdersRepo ordersRepo,
-                     int cpusNumber,
-                     int ramsNumber,
-                     int gpusNumber,
-                     int psusNumber,
-                     int disksNumber,
-                     int casesNumber,
-                     int motherboardsNumber,
-                     int configurationsNumber,
-                     int cpuVendorsNumber,
-                     int gpuVendorsNumber,
-                     int psuVendorsNumber,
-                     int ramVendorsNumber,
-                     int ramVersionsNumber,
-                     int ramFreqsNumber,
-                     int motherboardVendorsNumber,
-                     int diskVendorsNumber,
-                     int socketsNumber,
-                     int videoInterfacesNumber,
-                     int diskInterfacesNumber,
-                     int ordersNumber) {
+                     DataConfig cfg) {
         this.itemsRepo = itemsRepo;
         this.cpuVendorsRepo = cpuVendorsRepo;
         this.gpuVendorsRepo = gpuVendorsRepo;
@@ -138,26 +125,47 @@ public class Generator {
         this.disksRepo = disksRepo;
         this.configurationsRepo = configurationsRepo;
         this.ordersRepo = ordersRepo;
-        this.cpusNumber = cpusNumber;
-        this.ramsNumber = ramsNumber;
-        this.gpusNumber = gpusNumber;
-        this.psusNumber = psusNumber;
-        this.disksNumber = disksNumber;
-        this.casesNumber = casesNumber;
-        this.motherboardsNumber = motherboardsNumber;
-        this.configurationsNumber = configurationsNumber;
-        this.cpuVendorsNumber = cpuVendorsNumber;
-        this.gpuVendorsNumber = gpuVendorsNumber;
-        this.psuVendorsNumber = psuVendorsNumber;
-        this.ramVendorsNumber = ramVendorsNumber;
-        this.ramVersionsNumber = ramVersionsNumber;
-        this.ramFreqsNumber = ramFreqsNumber;
-        this.motherboardVendorsNumber = motherboardVendorsNumber;
-        this.diskVendorsNumber = diskVendorsNumber;
-        this.socketsNumber = socketsNumber;
-        this.videoInterfacesNumber = videoInterfacesNumber;
-        this.diskInterfacesNumber = diskInterfacesNumber;
-        this.ordersNumber = ordersNumber;
+        this.cpusNumber = cfg.getCpusNumber();
+        this.ramsNumber = cfg.getRamsNumber();
+        this.gpusNumber = cfg.getGpusNumber();
+        this.psusNumber = cfg.getPsusNumber();
+        this.disksNumber = cfg.getDisksNumber();
+        this.casesNumber = cfg.getCasesNumber();
+        this.motherboardsNumber = cfg.getMotherboardsNumber();
+        this.configurationsNumber = cfg.getConfigurationsNumber();
+        this.cpuVendorsNumber = cfg.getCpuVendorsNumber();
+        this.gpuVendorsNumber = cfg.getGpuVendorsNumber();
+        this.psuVendorsNumber = cfg.getPsuVendorsNumber();
+        this.ramVendorsNumber = cfg.getRamVendorsNumber();
+        this.ramVersionsNumber = cfg.getRamVersionsNumber();
+        this.ramFreqsNumber = cfg.getRamFreqsNumber();
+        this.motherboardVendorsNumber = cfg.getMotherboardVendorsNumber();
+        this.diskVendorsNumber = cfg.getDiskVendorsNumber();
+        this.socketsNumber = cfg.getSocketsNumber();
+        this.videoInterfacesNumber = cfg.getVideoInterfacesNumber();
+        this.diskInterfacesNumber = cfg.getDiskInterfacesNumber();
+        this.ordersNumber = cfg.getOrdersNumber();
+        this.videoInterfacesList = new ArrayList<>();
+        this.socketsList = new ArrayList<>();
+        this.ramFreqsList = new ArrayList<>();
+        this.ramVersionsList = new ArrayList<>();
+        this.psusList = new ArrayList<>();
+        this.ramVendorsList = new ArrayList<>();
+        this.ramsList = new ArrayList<>();
+        this.gpuVendorsList = new ArrayList<>();
+        this.gpusList = new ArrayList<>();
+        this.cpuVendorsList = new ArrayList<>();
+        this.cpusList = new ArrayList<>();
+        this.psuVendorsList = new ArrayList<>();
+        this.casesList = new ArrayList<>();
+        this.diskInterfacesList = new ArrayList<>();
+        this.diskVendorsList = new ArrayList<>();
+        this.disksList = new ArrayList<>();
+        this.motherboardVendorsList = new ArrayList<>();
+        this.motherboardsList = new ArrayList<>();
+        this.itemsList = new ArrayList<>();
+        this.configurationsList = new ArrayList<>();
+        this.ordersList = new ArrayList<>();
     }
 
     public void generate() {
@@ -181,7 +189,6 @@ public class Generator {
         generateMotherboardVendors();
         generateMotherboards();
         generateConfigurations();
-        generateMothCpuCompat();
         generateOrders();
         long end = System.currentTimeMillis();
         long elapsed = end - begin;
@@ -190,437 +197,326 @@ public class Generator {
         ));
     }
 
-    private void generateRamVersions() {
+
+    void generateRamVersions() {
         int i = 0;
         while (i < ramVersionsNumber) {
             i++;
-            try {
-                ramVersionsRepo.save(entityGenerator.generateRamVersion());
-                if (i % batchSize == 0) {
-                    ramVersionsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+
+            ramVersionsList.add(entityGenerator.generateRamVersion());
+
         }
-        ramVersionsRepo.flush();
-        ramVersionsList = ramVersionsRepo.findAll();
+        ramVersionsRepo.saveAll(ramVersionsList);
     }
 
-    private void generateRamFreqs() {
+
+    void generateRamFreqs() {
         int i = 0;
         while (i < ramFreqsNumber) {
             i++;
-            try {
-                ramFreqsRepo.save(entityGenerator.generateRamFreq());
-                if (i % batchSize == 0) {
-                    ramFreqsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
+
+            RamFreqs ramFreq = entityGenerator.generateRamFreq();
+            if (!ramFreqsList.contains(ramFreq)) {
+                ramFreqsList.add(ramFreq);
             }
+
         }
-        ramFreqsRepo.flush();
-        ramFreqsList = ramFreqsRepo.findAll();
+        ramFreqsRepo.saveAll(ramFreqsList);
     }
 
 
-    private void generateRamVendors() {
+    void generateRamVendors() {
         int i = 0;
         while (i < ramVendorsNumber) {
             i++;
-            try {
-                ramVendorsRepo.save(entityGenerator.generateRamVendor());
-                if (i % batchSize == 0) {
-                    ramVendorsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            ramVendorsList.add(entityGenerator.generateRamVendor());
         }
-        ramVendorsRepo.flush();
-        ramVendorsList = ramVendorsRepo.findAll();
+        ramVendorsRepo.saveAll(ramVendorsList);
     }
 
-    private void generateRams() {
+
+    void generateRams() {
         int i = 0;
         while (i < ramsNumber) {
             i++;
-            try {
-                Rams ram = entityGenerator.generateRam();
-                RamFreqs ramFreq = ramFreqsList.get(random.nextInt(ramFreqsNumber - 1));
-                RamVersions ramVersion = ramVersionsList.get(random.nextInt(ramVersionsNumber - 1));
-                RamVendors ramVendor = ramVendorsList.get(random.nextInt(ramVendorsNumber - 1));
-                ram.setRamFreqId(ramFreq);
-                ram.setVersionId(ramVersion);
-                ram.setVendorId(ramVendor);
 
-                Items item = entityGenerator.generateItem();
-                ram.setItem(item);
+            Rams ram = entityGenerator.generateRam();
+            RamFreqs ramFreq = ramFreqsList.get(random.nextInt(ramFreqsList.size()));
+            RamVersions ramVersion = ramVersionsList.get(random.nextInt(ramVersionsList.size()));
+            RamVendors ramVendor = ramVendorsList.get(random.nextInt(ramVendorsList.size()));
+            ram.setRamFreqId(ramFreq);
+            ram.setVersionId(ramVersion);
+            ram.setVendorId(ramVendor);
 
-                itemsRepo.save(item);
-                ramsRepo.save(ram);
-                if (i % batchSize == 0) {
-                    ramsRepo.flush();
-                    itemsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            Items item = entityGenerator.generateItem();
+            ram.setItem(item);
+
+            itemsList.add(item);
+            ramsList.add(ram);
+
         }
-        ramsRepo.flush();
-        itemsRepo.flush();
-        ramsList = ramsRepo.findAll();
+        itemsRepo.saveAll(itemsList);
+        ramsRepo.saveAll(ramsList);
     }
 
-    private void generateGpuVendors() {
+
+    void generateGpuVendors() {
         int i = 0;
         while (i < gpuVendorsNumber) {
             i++;
-            try {
-                gpuVendorsRepo.save(entityGenerator.generateGpuVendor());
-                if (i % batchSize == 0) {
-                    gpuVendorsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+
+            gpuVendorsList.add(entityGenerator.generateGpuVendor());
+
         }
-        gpuVendorsRepo.flush();
-        gpuVendorsList = gpuVendorsRepo.findAll();
+        gpuVendorsRepo.saveAll(gpuVendorsList);
     }
 
-    private void generateVideoInterfaces() {
+
+    void generateVideoInterfaces() {
         int i = 0;
         while (i < videoInterfacesNumber) {
             i++;
-            try {
-                videoInterfacesRepo.save(entityGenerator.generateVideoInterface());
-                if (i % batchSize == 0) {
-                    videoInterfacesRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+
+            videoInterfacesList.add(entityGenerator.generateVideoInterface());
         }
-        videoInterfacesRepo.flush();
-        videoInterfacesList = videoInterfacesRepo.findAll();
+        videoInterfacesRepo.saveAll(videoInterfacesList);
     }
 
-    private void generateGpus() {
+
+    void generateGpus() {
+        gpuVendorsList = gpuVendorsRepo.findAll();
+        videoInterfacesList = videoInterfacesRepo.findAll();
+        List<Items> tempItems = new ArrayList<>();
         int i = 0;
         while (i < gpusNumber) {
             i++;
-            try {
-                Gpus gpu = entityGenerator.generateGpu();
-                GpuVendors vendor = gpuVendorsList.get(random.nextInt(gpuVendorsNumber));
-                VideoInterfaces videoInterface = videoInterfacesList.get(random.nextInt(videoInterfacesNumber));
-                gpu.setVendorId(vendor);
-                gpu.setVideoInterfaceId(videoInterface);
-                ;
-                Items item = entityGenerator.generateItem();
-                gpu.setItem(item);
 
-                gpusRepo.save(gpu);
-                itemsRepo.save(item);
-                if (i % batchSize == 0) {
-                    gpusRepo.flush();
-                    itemsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            Gpus gpu = entityGenerator.generateGpu();
+            GpuVendors vendor = gpuVendorsList.get(random.nextInt(gpuVendorsList.size()));
+            VideoInterfaces videoInterface = videoInterfacesList.get(random.nextInt(videoInterfacesList.size()));
+            gpu.setVendorId(vendor);
+            gpu.setVideoInterfaceId(videoInterface);
+
+            Items item = entityGenerator.generateItem();
+            gpu.setItem(item);
+
+            gpusList.add(gpu);
+            tempItems.add(item);
         }
-        gpusRepo.flush();
-        itemsRepo.flush();
-        gpusList = gpusRepo.findAll();
+        gpusRepo.saveAll(gpusList);
+        itemsRepo.saveAll(tempItems);
     }
 
-    private void generateCpuVendors() {
+
+    void generateCpuVendors() {
         int i = 0;
         while (i < cpuVendorsNumber) {
             i++;
-            try {
-                cpuVendorsRepo.save(entityGenerator.generateCpuVendor());
-                if (i % batchSize == 0) {
-                    cpuVendorsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            cpuVendorsList.add(entityGenerator.generateCpuVendor());
         }
-        cpuVendorsRepo.flush();
-        cpuVendorsList = cpuVendorsRepo.findAll();
+        cpuVendorsRepo.saveAll(cpuVendorsList);
     }
 
-    private void generateSockets() {
+
+    void generateSockets() {
         int i = 0;
         while (i < socketsNumber) {
             i++;
-            try {
-                socketsRepo.save(entityGenerator.generateSocket());
-                if (i % batchSize == 0) {
-                    socketsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            socketsList.add(entityGenerator.generateSocket());
         }
-        socketsRepo.flush();
-        socketsList = socketsRepo.findAll();
+        socketsRepo.saveAll(socketsList);
     }
 
-    private void generateCpus() {
+
+    void generateCpus() {
+        cpuVendorsList = cpuVendorsRepo.findAll();
+        socketsList = socketsRepo.findAll();
         int i = 0;
+        List<Items> tempItems = new ArrayList<>();
         while (i < cpusNumber) {
             i++;
-            try {
-                Cpus cpu = entityGenerator.generateCpu();
-                RamFreqs ramFreq = ramFreqsList.get(random.nextInt(ramFreqsNumber));
-                CpuVendors vendor = cpuVendorsList.get(random.nextInt(cpuVendorsNumber));
-                Sockets socket = socketsList.get(random.nextInt(socketsNumber));
-                cpu.setMaxRamFreqId(ramFreq);
-                cpu.setVendorId(vendor);
-                cpu.setSocketId(socket);
 
+            Cpus cpu = entityGenerator.generateCpu();
+            RamFreqs ramFreq = ramFreqsList.get(random.nextInt(ramFreqsList.size()));
+            CpuVendors vendor = cpuVendorsList.get(random.nextInt(cpuVendorsList.size()));
+            Sockets socket = socketsList.get(random.nextInt(socketsList.size()));
+            cpu.setMaxRamFreqId(ramFreq);
+            cpu.setVendorId(vendor);
+            cpu.setSocketId(socket);
 
-                Items item = entityGenerator.generateItem();
-                cpu.setItem(item);
+            Items item = entityGenerator.generateItem();
+            cpu.setItem(item);
 
-                cpusRepo.save(cpu);
-                itemsRepo.save(item);
-                if (i % batchSize == 0) {
-                    cpusRepo.flush();
-                    itemsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            cpusList.add(cpu);
+            tempItems.add(item);
+
         }
-        cpusRepo.flush();
-        itemsRepo.flush();
-        cpusList = cpusRepo.findAll();
+        cpusRepo.saveAll(cpusList);
+        itemsRepo.saveAll(tempItems);
     }
 
-    private void generatePsuVendors() {
+
+    void generatePsuVendors() {
         int i = 0;
         while (i < psuVendorsNumber) {
             i++;
-            try {
-                psuVendorsRepo.save(entityGenerator.generatePsuVendor());
-                if (i % batchSize == 0) {
-                    psuVendorsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            PsuVendors psuVendor = entityGenerator.generatePsuVendor();
+            psuVendorsList.add(psuVendor);
         }
-        psuVendorsRepo.flush();
-        psuVendorsList = psuVendorsRepo.findAll();
+        psuVendorsRepo.saveAll(psuVendorsList);
     }
 
-    private void generatePsus() {
+
+    void generatePsus() {
+        psuVendorsList = psuVendorsRepo.findAll();
+        List<Items> tempItems = new ArrayList<>();
         int i = 0;
         while (i < psusNumber) {
             i++;
-            try {
-                Psus psu = entityGenerator.generatePsu();
-                psu.setVendorId(psuVendorsList.get(random.nextInt(psuVendorsNumber)));
 
-                Items item = entityGenerator.generateItem();
-                psu.setItem(item);
+            Psus psu = entityGenerator.generatePsu();
+            psu.setVendorId(psuVendorsList.get(random.nextInt(psuVendorsList.size())));
 
-                psusRepo.save(psu);
-                itemsRepo.save(item);
-                if (i % batchSize == 0) {
-                    psusRepo.flush();
-                    itemsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            Items item = entityGenerator.generateItem();
+            psu.setItem(item);
+
+            psusList.add(psu);
+            tempItems.add(item);
+
         }
-        psusRepo.flush();
-        itemsRepo.flush();
-        psusList = psusRepo.findAll();
+        psusRepo.saveAll(psusList);
+        itemsRepo.saveAll(tempItems);
     }
 
-    private void generateCases() {
+
+    void generateCases() {
+        List<Items> tempItems = new ArrayList<>();
         int i = 0;
         while (i < casesNumber) {
             i++;
-            try {
-                Cases caseObj = entityGenerator.generateCase();
 
-                Items item = entityGenerator.generateItem();
-                caseObj.setItem(item);
-
-                casesRepo.save(caseObj);
-                itemsRepo.save(item);
-                if (i % batchSize == 0) {
-                    casesRepo.flush();
-                    itemsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            Cases caseObj = entityGenerator.generateCase();
+            casesList.add(caseObj);
+            Items item = entityGenerator.generateItem();
+            caseObj.setItem(item);
+            tempItems.add(item);
         }
-        casesRepo.flush();
-        itemsRepo.flush();
-        casesList = casesRepo.findAll();
+        casesRepo.saveAll(casesList);
+        itemsRepo.saveAll(tempItems);
     }
 
-    private void generateDiskInterfaces() {
+
+    void generateDiskInterfaces() {
         int i = 0;
         while (i < diskInterfacesNumber) {
             i++;
-            try {
-                diskInterfacesRepo.save(entityGenerator.generateDiskInterface());
-                if (i % batchSize == 0) {
-                    diskInterfacesRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            DiskInterfaces diskInterfaces = entityGenerator.generateDiskInterface();
+            diskInterfacesList.add(diskInterfaces);
         }
-        diskInterfacesRepo.flush();
-        diskInterfacesList = diskInterfacesRepo.findAll();
+        diskInterfacesRepo.saveAll(diskInterfacesList);
     }
 
-    private void generateDiskVendors() {
+
+    void generateDiskVendors() {
         int i = 0;
         while (i < diskVendorsNumber) {
             i++;
-            try {
-                diskVendorsRepo.save(entityGenerator.generateDiskVendor());
-                if (i % batchSize == 0) {
-                    diskVendorsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            diskVendorsList.add(entityGenerator.generateDiskVendor());
         }
-        diskVendorsRepo.flush();
-        diskVendorsList = diskVendorsRepo.findAll();
+        diskVendorsRepo.saveAll(diskVendorsList);
     }
 
-    private void generateDisks() {
+
+    void generateDisks() {
+        List<Items> tempItems = new ArrayList<>();
         int i = 0;
         while (i < disksNumber) {
             i++;
-            try {
-                Disks disk = entityGenerator.generateDisk();
-                disk.setVendorId(diskVendorsList.get(random.nextInt(diskVendorsNumber)));
-                disk.setInterfaceId(diskInterfacesList.get(random.nextInt(diskInterfacesNumber)));
 
-                Items item = entityGenerator.generateItem();
-                disk.setItem(item);
+            Disks disk = entityGenerator.generateDisk();
+            disk.setVendorId(diskVendorsList.get(random.nextInt(diskVendorsList.size())));
+            disk.setInterfaceId(diskInterfacesList.get(random.nextInt(diskInterfacesList.size())));
 
-                itemsRepo.save(item);
-                disksRepo.save(disk);
+            Items item = entityGenerator.generateItem();
+            disk.setItem(item);
 
-                if (i % batchSize == 0) {
-                    disksRepo.flush();
-                    itemsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            tempItems.add(item);
+            disksList.add(disk);
         }
-        disksRepo.flush();
-        itemsRepo.flush();
-        disksList = disksRepo.findAll();
+        disksRepo.saveAll(disksList);
+        itemsRepo.saveAll(tempItems);
     }
 
-    private void generateMotherboardVendors() {
+
+    void generateMotherboardVendors() {
         int i = 0;
         while (i < motherboardVendorsNumber) {
             i++;
-            try {
-                motherboardVendorsRepo.save(entityGenerator.generateMotherboardVendor());
-                if (i % batchSize == 0) {
-                    motherboardVendorsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            motherboardVendorsList.add(entityGenerator.generateMotherboardVendor());
         }
-        motherboardVendorsRepo.flush();
-        motherboardVendorsList = motherboardVendorsRepo.findAll();
+        motherboardVendorsRepo.saveAll(motherboardVendorsList);
     }
 
-    private void generateMotherboards() {
+
+    void generateMotherboards() {
+        List<Items> tempItems = new ArrayList<>();
         int i = 0;
         while (i < motherboardsNumber) {
             i++;
-            try {
-                Motherboards motherboard = entityGenerator.generateMotherboard();
-                motherboard.setVendorId(motherboardVendorsList.get(random.nextInt(motherboardVendorsNumber)));
-                motherboard.setDiskInterfaceId(diskInterfacesList.get(random.nextInt(diskInterfacesNumber)));
-                motherboard.setMaxRamFreqId(ramFreqsList.get(random.nextInt(ramFreqsNumber)));
-                motherboard.setRamVersionId(ramVersionsList.get(random.nextInt(ramVersionsNumber)));
-                motherboard.setSocketId(socketsList.get(random.nextInt(socketsNumber)));
-                motherboard.setVideoInterfaceId(videoInterfacesList.get(random.nextInt(videoInterfacesNumber)));
+            Motherboards motherboard = entityGenerator.generateMotherboard();
+            motherboard.setVendorId(motherboardVendorsList.get(random.nextInt(motherboardVendorsList.size())));
+            motherboard.setDiskInterfaceId(diskInterfacesList.get(random.nextInt(diskInterfacesList.size())));
+            motherboard.setMaxRamFreqId(ramFreqsList.get(random.nextInt(ramFreqsList.size())));
+            motherboard.setRamVersionId(ramVersionsList.get(random.nextInt(ramVendorsList.size())));
+            motherboard.setSocketId(socketsList.get(random.nextInt(socketsList.size())));
+            motherboard.setVideoInterfaceId(videoInterfacesList.get(random.nextInt(videoInterfacesList.size())));
 
-                Items item = entityGenerator.generateItem();
-                motherboard.setItem(item);
+            Items item = entityGenerator.generateItem();
+            motherboard.setItem(item);
 
-                itemsRepo.save(item);
-                motherboardsRepo.save(motherboard);
-                if (i % batchSize == 0) {
-                    motherboardsRepo.flush();
-                    itemsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            tempItems.add(item);
+            motherboardsList.add(motherboard);
         }
-        motherboardsRepo.flush();
-        itemsRepo.flush();
-        motherboardsList = motherboardsRepo.findAll();
+        motherboardsRepo.saveAll(motherboardsList);
+        itemsRepo.saveAll(tempItems);
     }
 
-    private void generateConfigurations() {
+
+    void generateConfigurations() {
+        List<Items> tempItems = new ArrayList<>();
         int i = 0;
         while (i < configurationsNumber) {
             i++;
-            try {
-                Configurations configuration = entityGenerator.generateConfiguration();
-                Cpus cpu = cpusRepo.findAll().get(random.nextInt(cpusNumber));
-                Gpus gpu = gpusList.get(random.nextInt(gpusNumber));
-                Psus psu = psusList.get(random.nextInt(gpusNumber));
-                Cases caseObj = casesList.get(random.nextInt(casesNumber));
-                Motherboards motherboard = motherboardsList.get(random.nextInt(motherboardsNumber));
-                Disks disk = disksList.get(random.nextInt(disksNumber));
-                Rams ram = ramsList.get(random.nextInt(ramsNumber));
-                configuration.setCpuId(cpu);
-                configuration.setGpuId(gpu);
-                configuration.setPsuId(psu);
-                configuration.setCaseId(caseObj);
-                configuration.setMotherboardId(motherboard);
-                configuration.setDiskId(disk);
-                configuration.setRamId(ram);
 
-                Items item = entityGenerator.generateItem();
-                itemsRepo.save(item);
+            Configurations configuration = entityGenerator.generateConfiguration();
+            Cpus cpu = cpusList.get(random.nextInt(cpusList.size()));
+            Gpus gpu = gpusList.get(random.nextInt(gpusList.size()));
+            Psus psu = psusList.get(random.nextInt(psusList.size()));
+            Cases caseObj = casesList.get(random.nextInt(casesList.size()));
+            Motherboards motherboard = motherboardsList.get(random.nextInt(motherboardsList.size()));
+            Disks disk = disksList.get(random.nextInt(disksList.size()));
+            Rams ram = ramsList.get(random.nextInt(ramsList.size()));
+            configuration.setCpuId(cpu.getItem());
+            configuration.setGpuId(gpu.getItem());
+            configuration.setPsuId(psu.getItem());
+            configuration.setCaseId(caseObj.getItem());
+            configuration.setMotherboardId(motherboard.getItem());
+            configuration.setDiskId(disk.getItem());
+            configuration.setRamId(ram.getItem());
 
-                configuration.setItem(item);
-                configurationsRepo.save(configuration);
-                if (i % batchSize == 0) {
-                    configurationsRepo.flush();
-                    itemsRepo.flush();
-                }
-            } catch (Exception e) {
-                continue;
-            }
+            Items item = entityGenerator.generateItem();
+            tempItems.add(item);
+
+            configuration.setItem(item);
+            configurationsList.add(configuration);
         }
-        configurationsRepo.flush();
-        itemsRepo.flush();
+        configurationsRepo.saveAll(configurationsList);
+        itemsRepo.saveAll(tempItems);
     }
 
-    private void generateOrders() {
+
+    void generateOrders() {
         int i = 0;
-        itemsList = itemsRepo.findAll();
         while (i < ordersNumber) {
             i++;
             Orders order = entityGenerator.generateOrder();
@@ -630,33 +526,8 @@ public class Generator {
                 item.addOrder(order);
                 order.setTotalPrice(order.getTotalPrice() + item.getPrice());
             }
-            ordersRepo.save(order);
-            if (i % batchSize == 0) {
-                ordersRepo.flush();
-            }
+            ordersList.add(order);
         }
-        ordersRepo.flush();
-    }
-
-    private void generateMothCpuCompat() {
-        motherboardsList = motherboardsRepo.findAll();
-        cpusList = cpusRepo.findAll();
-        for (Motherboards motherboard : motherboardsList) {
-            for (Cpus cpu : cpusList) {
-                try{
-                    if (motherboard.getSocketId()
-                        .equals(cpu.getSocketId())
-                        && motherboard.getMaxRamFreqId()
-                        .equals(cpu.getMaxRamFreqId())) {
-                        motherboard.addCpu(cpu);
-                        cpu.addMotherboard(motherboard);
-                    }
-                } catch (NullPointerException e) {
-                    System.out.println(cpu.getName());
-                    System.out.println(motherboard.getName());
-                }
-
-            }
-        }
+        ordersRepo.saveAll(ordersList);
     }
 }

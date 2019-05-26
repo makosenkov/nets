@@ -2,7 +2,10 @@ package mksnkv.nets.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "gpus")
 @NoArgsConstructor
-@ToString
 @EqualsAndHashCode(of = "id")
 public class Gpus {
 

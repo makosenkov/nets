@@ -1,10 +1,11 @@
 package mksnkv.nets.controllers;
 
 import lombok.AllArgsConstructor;
-import mksnkv.nets.entities.Cpus;
 import mksnkv.nets.entities.GpuVendors;
 import mksnkv.nets.entities.Rams;
 import mksnkv.nets.repos.*;
+import mksnkv.nets.utilities.ConfigLoader;
+import mksnkv.nets.utilities.DataConfig;
 import mksnkv.nets.utilities.Generator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,8 +47,8 @@ public class EntitiesController {
     }
 
     @GetMapping("/cpus")
-    public List<Cpus> listCpus() {
-        return cpusRepo.findAll();
+    public long listCpus() {
+        return cpusRepo.count();
     }
 
     @GetMapping("/gpuvendors")
@@ -62,6 +63,7 @@ public class EntitiesController {
     }
 
     public void generate() {
+        DataConfig config = ConfigLoader.getInstance().getDataObject("/home/mksnkv/dev/nets/src/main/resources/config.properties");
         Generator generator = new Generator(itemsRepo,
             cpuVendorsRepo,
             gpuVendorsRepo,
@@ -83,26 +85,7 @@ public class EntitiesController {
             disksRepo,
             configurationsRepo,
             ordersRepo,
-            110,
-            150,
-            200,
-            120,
-            120,
-            120,
-            100,
-            100,
-            10,
-            10,
-            10,
-            50,
-            50,
-            5,
-            50,
-            50,
-            5,
-            10,
-            20,
-            20
+            config
         );
         generator.generate();
     }

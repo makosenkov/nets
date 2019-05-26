@@ -1,128 +1,126 @@
 package mksnkv.nets.utilities;
 
-import com.github.javafaker.Faker;
 import mksnkv.nets.entities.*;
 
 import java.util.HashSet;
 import java.util.Random;
 
-public class EntitiesGenerator {
-    
+class EntitiesGenerator {
+
     private final Random random = new Random();
-    private Faker faker = new Faker();
-    
-    public RamVersions generateRamVersion() {
+    private final StringRandomizer randomizer = StringRandomizer.INSTANCE;
+
+    RamVersions generateRamVersion() {
         RamVersions entity = new RamVersions();
-        entity.setName(String.format("DDR%d", random.nextInt(5000)));
+        entity.setName(randomizer.generateRandomString(15));
         return entity;
     }
 
-    public RamFreqs generateRamFreq() {
+    RamFreqs generateRamFreq() {
         RamFreqs entity = new RamFreqs();
-        entity.setName(random.nextInt(4000)+200);
+        entity.setName(random.nextInt(4000) + 200);
         return entity;
     }
 
-    public RamVendors generateRamVendor() {
+    RamVendors generateRamVendor() {
         RamVendors entity = new RamVendors();
-        entity.setName(faker.company().name());
+        entity.setName(randomizer.generateRandomString(15));
         return entity;
     }
 
-    public Sockets generateSocket() {
+    Sockets generateSocket() {
         Sockets entity = new Sockets();
-        entity.setName(String.format("Socket%d", random.nextInt(5000)));
+        entity.setName(randomizer.generateRandomString(15));
         return entity;
     }
 
-    public CpuVendors generateCpuVendor() {
+    CpuVendors generateCpuVendor() {
         CpuVendors entity = new CpuVendors();
-        entity.setName(faker.company().name());
+        entity.setName(randomizer.generateRandomString(15));
         return entity;
     }
 
-    public GpuVendors generateGpuVendor() {
+    GpuVendors generateGpuVendor() {
         GpuVendors entity = new GpuVendors();
-        entity.setName(faker.company().name());
+        entity.setName(randomizer.generateRandomString(15));
         return entity;
     }
 
-    public PsuVendors generatePsuVendor() {
+    PsuVendors generatePsuVendor() {
         PsuVendors entity = new PsuVendors();
-        entity.setName(faker.company().name());
+        entity.setName(randomizer.generateRandomString(15));
         return entity;
     }
-    
 
-    public MotherboardVendors generateMotherboardVendor() {
+
+    MotherboardVendors generateMotherboardVendor() {
         MotherboardVendors entity = new MotherboardVendors();
-        entity.setName(faker.company().name());
+        entity.setName(randomizer.generateRandomString(15));
         return entity;
     }
 
-    public DiskVendors generateDiskVendor() {
+    DiskVendors generateDiskVendor() {
         DiskVendors entity = new DiskVendors();
-        entity.setName(faker.company().name());
+        entity.setName(randomizer.generateRandomString(15));
         return entity;
     }
 
-    public Cases generateCase() {
+    Cases generateCase() {
         Cases entity = new Cases();
-        entity.setName(faker.rockBand().name());
+        entity.setName(randomizer.generateRandomString(15));
         entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
-    public VideoInterfaces generateVideoInterface() {
+    VideoInterfaces generateVideoInterface() {
         VideoInterfaces entity = new VideoInterfaces();
-        entity.setName(faker.app().name() + random.nextInt(10));
+        entity.setName(randomizer.generateRandomString(15));
         return entity;
     }
 
-    public DiskInterfaces generateDiskInterface() {
+    DiskInterfaces generateDiskInterface() {
         DiskInterfaces entity = new DiskInterfaces();
-        entity.setName(String.format("SATA%d", random.nextInt(3000)));
+        entity.setName(randomizer.generateRandomString(15));
         return entity;
     }
 
-    public Cpus generateCpu() {
+    Cpus generateCpu() {
         Cpus entity = new Cpus();
-        entity.setName(faker.cat().name() + random.nextInt(10));
-        entity.setPower(random.nextInt(100)+50);
-        entity.setMotherboards(new HashSet<>());
+        entity.setName(randomizer.generateRandomString(15));
+        entity.setPower(random.nextInt(100) + 50);
         entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
-    public Gpus generateGpu() {
+    Gpus generateGpu() {
         Gpus entity = new Gpus();
-        entity.setName(faker.dog().name() + random.nextInt(10));
-        entity.setPower(random.nextInt(500)+200);
+        entity.setName(randomizer.generateRandomString(15));
+        entity.setPower(random.nextInt(500) + 200);
         entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
-    public Psus generatePsu() {
+    Psus generatePsu() {
         Psus entity = new Psus();
-        entity.setName(faker.beer().name());
-        entity.setPowerRate(random.nextInt(1500)+500);
+        entity.setName(randomizer.generateRandomString(15));
+        entity.setPowerRate(random.nextInt(1500) + 500);
         entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
-    public Disks generateDisk() {
+    Disks generateDisk() {
         Disks entity = new Disks();
-        entity.setName(faker.beer().name() + random.nextInt(10));
-        entity.setPower(random.nextInt(300)+200);
-        entity.setArchitecture(faker.beer().style());
+        entity.setName(randomizer.generateRandomString(15));
+        entity.setPower(random.nextInt(300) + 200);
+        entity.setArchitecture(randomizer.generateRandomString(15));
         entity.setConfigurations(new HashSet<>());
         return entity;
     }
 
-    public Rams generateRam() {
+    Rams generateRam() {
         Rams entity = new Rams();
-        entity.setName(faker.esports().game() + random.nextInt(20));
-        entity.setPower(random.nextInt(50)+10);
+        entity.setName(randomizer.generateRandomString(15));
+        entity.setPower(random.nextInt(50) + 10);
         entity.setConfigurations(new HashSet<>());
         return entity;
     }
@@ -133,8 +131,7 @@ public class EntitiesGenerator {
 
     Motherboards generateMotherboard() {
         Motherboards entity = new Motherboards();
-        entity.setName(faker.space().galaxy() + random.nextInt(10));
-        entity.setCpus(new HashSet<>());
+        entity.setName(randomizer.generateRandomString(15));
         entity.setConfigurations(new HashSet<>());
         return entity;
     }
@@ -142,14 +139,14 @@ public class EntitiesGenerator {
     Items generateItem() {
         return new Items(
             random.nextInt(25000),
-            faker.witcher().monster() + random.nextInt(1000),
+            randomizer.generateRandomString(15),
             random.nextBoolean()
         );
     }
 
-    public Orders generateOrder() {
+    Orders generateOrder() {
         Orders entity = new Orders();
-        entity.setAddress(faker.address().fullAddress());
+        entity.setAddress(randomizer.generateRandomString(15));
         entity.setItems(new HashSet<>());
         return entity;
     }

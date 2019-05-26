@@ -1,13 +1,16 @@
 buildscript {
-	repositories {
+    ext.kotlin_version = '1.3.31'
+    repositories {
 		mavenCentral()
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE")
-	}
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }
 
 apply plugin: 'java'
+apply plugin: 'kotlin'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
@@ -34,4 +37,16 @@ dependencies {
 	compile('com.sun.xml.bind:jaxb-impl:2.3.2')
 	compile('com.github.javafaker:javafaker:0.18')
 	testCompile("junit:junit")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+	implementation "io.hypersistence:hypersistence-optimizer:1.1.1-SNAPSHOT"
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }

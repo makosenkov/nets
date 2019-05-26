@@ -1,14 +1,16 @@
 package mksnkv.nets.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "configurations")
 @NoArgsConstructor
-@ToString
 @EqualsAndHashCode(of = "id")
 public class Configurations {
 
@@ -28,52 +30,57 @@ public class Configurations {
   @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "motherboard_id")
-  private Motherboards motherboardId;
+  private Items motherboardId;
 
   @Getter
   @Setter
   @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "cpu_id")
-  private Cpus cpuId;
+  private Items cpuId;
 
   @Getter
   @Setter
   @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "gpu_id")
-  private Gpus gpuId;
+  private Items gpuId;
 
   @Getter
   @Setter
   @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ram_id")
-  private Rams ramId;
+  private Items ramId;
 
   @Getter
   @Setter
   @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "disk_id")
-  private Disks diskId;
+  private Items diskId;
 
   @Getter
   @Setter
   @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "psu_id")
-  private Psus psuId;
+  private Items psuId;
 
   @Getter
   @Setter
   @JsonBackReference
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "case_id")
-  private Cases caseId;
+  private Items caseId;
 
-  public Configurations(Motherboards motherboardId, Cpus cpuId, Gpus gpuId, Rams ramId,
-                        Disks diskId, Psus psuId, Cases caseId) {
+  public Configurations(Items motherboardId,
+                        Items cpuId,
+                        Items gpuId,
+                        Items ramId,
+                        Items diskId,
+                        Items psuId,
+                        Items caseId) {
     this.motherboardId = motherboardId;
     this.cpuId = cpuId;
     this.gpuId = gpuId;

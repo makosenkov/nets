@@ -2,7 +2,10 @@ package mksnkv.nets.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "motherboards")
 @NoArgsConstructor
-@ToString
 @EqualsAndHashCode(of = "id")
 public class Motherboards {
 
@@ -83,7 +85,6 @@ public class Motherboards {
     this.videoInterfaceId = videoInterfaceId;
     this.vendorId = vendorId;
     this.configurations = new HashSet<>();
-    this.cpus = new HashSet<>();
   }
 
   @Setter
@@ -98,23 +99,6 @@ public class Motherboards {
 
   public void removeConfiguration(Configurations configuration) {
     configurations.remove(configuration);
-  }
-
-  @Setter
-  @Getter
-  @ManyToMany
-  @JsonManagedReference
-  @JoinTable(name = "moth_cpu_compat",
-      joinColumns = @JoinColumn(name = "motherboard_id"),
-      inverseJoinColumns = @JoinColumn(name = "cpu_id"))
-  private Set<Cpus> cpus;
-
-  public void addCpu(Cpus cpu) {
-    cpus.add(cpu);
-  }
-
-  public void removeCpu(Cpus cpu) {
-    cpus.remove(cpu);
   }
 
 }
