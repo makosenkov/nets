@@ -7,15 +7,16 @@ import mksnkv.nets.repos.*;
 import mksnkv.nets.utilities.ConfigLoader;
 import mksnkv.nets.utilities.DataConfig;
 import mksnkv.nets.utilities.Generator;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@RestController()
+@Controller
 @AllArgsConstructor
-@Configuration
 public class EntitiesController {
 
     private final ItemsRepo itemsRepo;
@@ -45,7 +46,12 @@ public class EntitiesController {
     public List<Rams> listRams() {
         return ramsRepo.findAll();
     }
-
+/*
+    @GetMapping("/")
+    public List<Configurations> listConfigurations() {
+        return configurationsRepo.findAll();
+    }
+*/
     @GetMapping("/cpus")
     public long listCpus() {
         return cpusRepo.count();
@@ -56,10 +62,83 @@ public class EntitiesController {
         return gpuVendorsRepo.findAll();
     }
 
+    /*
     @GetMapping("/generator")
     public String generateData() {
         generate();
         return "method generate() was called, wait several minutes to see the data";
+    }
+*/
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String generatorPage(){
+        return "generatorPage";
+    }
+
+    @RequestMapping(value = "/generator")
+    void generateV(@RequestParam int cpuVendorsNumber,
+                   @RequestParam int gpuVendorsNumber,
+                   @RequestParam int ramVendorsNumber,
+                   @RequestParam int ramVersionsNumber,
+                   @RequestParam int ramFreqsNumber,
+                   @RequestParam int psuVendorsNumber,
+                   @RequestParam int diskVendorsNumber,
+                   @RequestParam int diskInterfacesNumber,
+                   @RequestParam int socketsNumber,
+                   @RequestParam int videoInterfacesNumber,
+                   @RequestParam int motherboardsNumber,
+                   @RequestParam int motherboardVendorsNumber,
+                   @RequestParam int cpusNumber,
+                   @RequestParam int gpusNumber,
+                   @RequestParam int psusNumber,
+                   @RequestParam int ramsNumber,
+                   @RequestParam int casesNumber,
+                   @RequestParam int disksNumber,
+                   @RequestParam int configurationsNumber,
+                   @RequestParam int ordersNumber) {
+        Generator generator = new Generator(itemsRepo,
+            cpuVendorsRepo,
+            gpuVendorsRepo,
+            ramVendorsRepo,
+            ramVersionsRepo,
+            ramFreqsRepo,
+            psuVendorsRepo,
+            diskVendorsRepo,
+            diskInterfacesRepo,
+            socketsRepo,
+            videoInterfacesRepo,
+            motherboardsRepo,
+            motherboardVendorsRepo,
+            cpusRepo,
+            gpusRepo,
+            psusRepo,
+            ramsRepo,
+            casesRepo,
+            disksRepo,
+            configurationsRepo,
+            ordersRepo,
+            cpusNumber,
+            ramsNumber,
+            gpusNumber,
+            psusNumber,
+            disksNumber,
+            casesNumber,
+            motherboardsNumber,
+            configurationsNumber,
+            cpuVendorsNumber,
+            gpuVendorsNumber,
+            psuVendorsNumber,
+            ramVendorsNumber,
+            ramVersionsNumber,
+            ramFreqsNumber,
+            motherboardVendorsNumber,
+            diskVendorsNumber,
+            socketsNumber,
+            videoInterfacesNumber,
+            diskInterfacesNumber,
+            ordersNumber
+        );
+        generator.generate();
     }
 
     public void generate() {

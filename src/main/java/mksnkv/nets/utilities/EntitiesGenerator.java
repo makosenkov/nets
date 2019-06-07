@@ -89,6 +89,7 @@ class EntitiesGenerator {
         entity.setName(randomizer.generateRandomString(15));
         entity.setPower(random.nextInt(100) + 50);
         entity.setConfigurations(new HashSet<>());
+        entity.setMotherboards(new HashSet<>());
         return entity;
     }
 
@@ -133,6 +134,7 @@ class EntitiesGenerator {
         Motherboards entity = new Motherboards();
         entity.setName(randomizer.generateRandomString(15));
         entity.setConfigurations(new HashSet<>());
+        entity.setCpus(new HashSet<>());
         return entity;
     }
 

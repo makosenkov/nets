@@ -81,6 +81,70 @@ public class Generator {
     private List<Configurations> configurationsList;
     private List<Orders> ordersList;
 
+    public Generator(ItemsRepo itemsRepo, CpuVendorsRepo cpuVendorsRepo, GpuVendorsRepo gpuVendorsRepo, RamVendorsRepo ramVendorsRepo, RamVersionsRepo ramVersionsRepo, RamFreqsRepo ramFreqsRepo, PsuVendorsRepo psuVendorsRepo, DiskVendorsRepo diskVendorsRepo, DiskInterfacesRepo diskInterfacesRepo, SocketsRepo socketsRepo, VideoInterfacesRepo videoInterfacesRepo, MotherboardsRepo motherboardsRepo, MotherboardVendorsRepo motherboardVendorsRepo, CpusRepo cpusRepo, GpusRepo gpusRepo, PsusRepo psusRepo, RamsRepo ramsRepo, CasesRepo casesRepo, DisksRepo disksRepo, ConfigurationsRepo configurationsRepo, OrdersRepo ordersRepo, int cpusNumber, int ramsNumber, int gpusNumber, int psusNumber, int disksNumber, int casesNumber, int motherboardsNumber, int configurationsNumber, int cpuVendorsNumber, int gpuVendorsNumber, int psuVendorsNumber, int ramVendorsNumber, int ramVersionsNumber, int ramFreqsNumber, int motherboardVendorsNumber, int diskVendorsNumber, int socketsNumber, int videoInterfacesNumber, int diskInterfacesNumber, int ordersNumber) {
+        this.itemsRepo = itemsRepo;
+        this.cpuVendorsRepo = cpuVendorsRepo;
+        this.gpuVendorsRepo = gpuVendorsRepo;
+        this.ramVendorsRepo = ramVendorsRepo;
+        this.ramVersionsRepo = ramVersionsRepo;
+        this.ramFreqsRepo = ramFreqsRepo;
+        this.psuVendorsRepo = psuVendorsRepo;
+        this.diskVendorsRepo = diskVendorsRepo;
+        this.diskInterfacesRepo = diskInterfacesRepo;
+        this.socketsRepo = socketsRepo;
+        this.videoInterfacesRepo = videoInterfacesRepo;
+        this.motherboardsRepo = motherboardsRepo;
+        this.motherboardVendorsRepo = motherboardVendorsRepo;
+        this.cpusRepo = cpusRepo;
+        this.gpusRepo = gpusRepo;
+        this.psusRepo = psusRepo;
+        this.ramsRepo = ramsRepo;
+        this.casesRepo = casesRepo;
+        this.disksRepo = disksRepo;
+        this.configurationsRepo = configurationsRepo;
+        this.ordersRepo = ordersRepo;
+        this.cpusNumber = cpusNumber;
+        this.ramsNumber = ramsNumber;
+        this.gpusNumber = gpusNumber;
+        this.psusNumber = psusNumber;
+        this.disksNumber = disksNumber;
+        this.casesNumber = casesNumber;
+        this.motherboardsNumber = motherboardsNumber;
+        this.configurationsNumber = configurationsNumber;
+        this.cpuVendorsNumber = cpuVendorsNumber;
+        this.gpuVendorsNumber = gpuVendorsNumber;
+        this.psuVendorsNumber = psuVendorsNumber;
+        this.ramVendorsNumber = ramVendorsNumber;
+        this.ramVersionsNumber = ramVersionsNumber;
+        this.ramFreqsNumber = ramFreqsNumber;
+        this.motherboardVendorsNumber = motherboardVendorsNumber;
+        this.diskVendorsNumber = diskVendorsNumber;
+        this.socketsNumber = socketsNumber;
+        this.videoInterfacesNumber = videoInterfacesNumber;
+        this.diskInterfacesNumber = diskInterfacesNumber;
+        this.ordersNumber = ordersNumber;
+        this.videoInterfacesList = new ArrayList<>();
+        this.socketsList = new ArrayList<>();
+        this.ramFreqsList = new ArrayList<>();
+        this.ramVersionsList = new ArrayList<>();
+        this.psusList = new ArrayList<>();
+        this.ramVendorsList = new ArrayList<>();
+        this.ramsList = new ArrayList<>();
+        this.gpuVendorsList = new ArrayList<>();
+        this.gpusList = new ArrayList<>();
+        this.cpuVendorsList = new ArrayList<>();
+        this.cpusList = new ArrayList<>();
+        this.psuVendorsList = new ArrayList<>();
+        this.casesList = new ArrayList<>();
+        this.diskInterfacesList = new ArrayList<>();
+        this.diskVendorsList = new ArrayList<>();
+        this.disksList = new ArrayList<>();
+        this.motherboardVendorsList = new ArrayList<>();
+        this.motherboardsList = new ArrayList<>();
+        this.itemsList = new ArrayList<>();
+        this.configurationsList = new ArrayList<>();
+        this.ordersList = new ArrayList<>();
+    }
 
     public Generator(ItemsRepo itemsRepo,
                      CpuVendorsRepo cpuVendorsRepo,
@@ -188,6 +252,7 @@ public class Generator {
         generateDisks();
         generateMotherboardVendors();
         generateMotherboards();
+        generateMothCpuCompat();
         generateConfigurations();
         generateOrders();
         long end = System.currentTimeMillis();
@@ -202,9 +267,7 @@ public class Generator {
         int i = 0;
         while (i < ramVersionsNumber) {
             i++;
-
             ramVersionsList.add(entityGenerator.generateRamVersion());
-
         }
         ramVersionsRepo.saveAll(ramVersionsList);
     }
@@ -467,7 +530,7 @@ public class Generator {
             motherboard.setVendorId(motherboardVendorsList.get(random.nextInt(motherboardVendorsList.size())));
             motherboard.setDiskInterfaceId(diskInterfacesList.get(random.nextInt(diskInterfacesList.size())));
             motherboard.setMaxRamFreqId(ramFreqsList.get(random.nextInt(ramFreqsList.size())));
-            motherboard.setRamVersionId(ramVersionsList.get(random.nextInt(ramVendorsList.size())));
+            motherboard.setRamVersionId(ramVersionsList.get(random.nextInt(ramVersionsList.size())));
             motherboard.setSocketId(socketsList.get(random.nextInt(socketsList.size())));
             motherboard.setVideoInterfaceId(videoInterfacesList.get(random.nextInt(videoInterfacesList.size())));
 
@@ -481,6 +544,17 @@ public class Generator {
         itemsRepo.saveAll(tempItems);
     }
 
+    void generateMothCpuCompat() {
+        for (Cpus cpu : cpusList) {
+            for (Motherboards motherboard : motherboardsList) {
+                if (cpu.getSocketId() == motherboard.getSocketId()
+                && cpu.getMaxRamFreqId() == motherboard.getMaxRamFreqId()) {
+                    cpu.addMotherboard(motherboard);
+                }
+            }
+        }
+    }
+
 
     void generateConfigurations() {
         List<Items> tempItems = new ArrayList<>();
@@ -490,11 +564,29 @@ public class Generator {
 
             Configurations configuration = entityGenerator.generateConfiguration();
             Cpus cpu = cpusList.get(random.nextInt(cpusList.size()));
-            Gpus gpu = gpusList.get(random.nextInt(gpusList.size()));
             Psus psu = psusList.get(random.nextInt(psusList.size()));
             Cases caseObj = casesList.get(random.nextInt(casesList.size()));
-            Motherboards motherboard = motherboardsList.get(random.nextInt(motherboardsList.size()));
-            Disks disk = disksList.get(random.nextInt(disksList.size()));
+            int rand = random.nextInt(cpu.getMotherboards().size());
+            int j = 0;
+            Motherboards motherboard = null;
+            for (Motherboards moth : cpu.getMotherboards()) {
+                j++;
+                if (rand == j) {
+                    motherboard = moth;
+                }
+            }
+            if (motherboard == null) {
+                continue;
+            }
+            Motherboards finalMotherboard = motherboard;
+            Gpus gpu = gpusList.stream()
+                .filter(gpus -> gpus.getVideoInterfaceId() == finalMotherboard.getVideoInterfaceId())
+                .findAny()
+                .orElseThrow(NullPointerException::new);
+            Disks disk = disksList.stream()
+                .filter(disks -> disks.getInterfaceId() == finalMotherboard.getDiskInterfaceId())
+                .findAny()
+                .orElseThrow(NullPointerException::new);
             Rams ram = ramsList.get(random.nextInt(ramsList.size()));
             configuration.setCpuId(cpu.getItem());
             configuration.setGpuId(gpu.getItem());

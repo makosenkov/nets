@@ -15,16 +15,13 @@ import java.util.Set;
 @Table(name = "cpus")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Cpus {
+public class Cpus{
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
-
   @Getter
   @Setter
-  @Column(name = "name")
-  private String name;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
   @OneToOne
   @MapsId
@@ -32,6 +29,11 @@ public class Cpus {
   @Setter
   @JsonBackReference
   private Items item;
+
+  @Getter
+  @Setter
+  @Column(name = "name")
+  private String name;
 
   @Getter
   @Setter
@@ -67,6 +69,7 @@ public class Cpus {
     this.maxRamFreqId = maxRamFreqId;
     this.vendorId = vendorId;
     this.configurations = new HashSet<>();
+    this.motherboards = new HashSet<>();
   }
 
   @Setter
@@ -83,4 +86,20 @@ public class Cpus {
     configurations.remove(configuration);
   }
 
+  @Getter
+  @Setter
+  @ManyToMany
+  @JsonManagedReference
+  @JoinTable(name = "moth_cpu_compat",
+      joinColumns = @JoinColumn(name = "cpu_id"),
+      inverseJoinColumns = @JoinColumn(name = "motherboard_id"))
+  private Set<Motherboards> motherboards;
+
+  public void addMotherboard(Motherboards motherboard) {
+    motherboards.add(motherboard);
+  }
+
+  public void removeMotherboard(Motherboards motherboard) {
+    motherboards.remove(motherboard);
+  }
 }

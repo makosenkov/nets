@@ -85,6 +85,7 @@ public class Motherboards {
     this.videoInterfaceId = videoInterfaceId;
     this.vendorId = vendorId;
     this.configurations = new HashSet<>();
+    cpus = new HashSet<>();
   }
 
   @Setter
@@ -101,4 +102,20 @@ public class Motherboards {
     configurations.remove(configuration);
   }
 
+  @Getter
+  @Setter
+  @ManyToMany
+  @JsonBackReference
+  @JoinTable(name = "moth_cpu_compat",
+      joinColumns = @JoinColumn(name = "motherboard_id"),
+      inverseJoinColumns = @JoinColumn(name = "cpu_id"))
+  private Set<Cpus> cpus;
+
+  public void addCpu(Cpus cpu) {
+    cpus.add(cpu);
+  }
+
+  public void removeCpu(Cpus cpu) {
+    cpus.remove(cpu);
+  }
 }

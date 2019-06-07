@@ -22,7 +22,6 @@ public class Configurations {
   @MapsId
   @Getter
   @Setter
-  @JsonBackReference
   private Items item;
 
   @Getter

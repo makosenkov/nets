@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link type="text/css" href="/css/generator.css" rel="stylesheet">
+    <script src="/js/script.js"></script>
+    <title>Generator</title>
+</head>
+<body>
+<form class="generator-form">
+    <h3>Generator</h3>
+    <div class="loading">
+    </div>
+    <div class="form-group">
+        <label for="cpusNumber">cpus number</label>
+        <input type="text" id="cpusNumber" pattern="[0-9]+$" required>
+        <label for="ramsNumber">rams number</label>
+        <input type="text" id="ramsNumber" pattern="[0-9]+$" required>
+        <label for="gpusNumber">gpus number</label>
+        <input type="text" id="gpusNumber" pattern="[0-9]+$" required>
+        <label for="psusNumber">psus number</label>
+        <input type="text" id="psusNumber" pattern="[0-9]+$" required>
+        <label for="disksNumber">disks number</label>
+        <input type="text" id="disksNumber" pattern="[0-9]+$" required>
+        <label for="casesNumber">cases number</label>
+        <input type="text" id="casesNumber" pattern="[0-9]+$" required>
+        <label for="motherboardsNumber">motherboards number</label>
+        <input type="text" id="motherboardsNumber" pattern="[0-9]+$" required>
+        <label for="configurationsNumber">configurations number</label>
+        <input type="text" id="configurationsNumber" pattern="[0-9]+$" required>
+        <label for="cpuVendorsNumber">cpu vendors number</label>
+        <input type="text" id="cpuVendorsNumber" pattern="[0-9]+$" required>
+        <label for="gpuVendorsNumber">gpu vendors number</label>
+        <input type="text" id="gpuVendorsNumber" pattern="[0-9]+$" required>
+        <label for="psuVendorsNumber">psu vendors number</label>
+        <input type="text" id="psuVendorsNumber" pattern="[0-9]+$" required>
+        <label for="ramVendorsNumber">ram vendors number</label>
+        <input type="text" id="ramVendorsNumber" pattern="[0-9]+$" required>
+        <label for="ramVersionsNumber">ram versions number</label>
+        <input type="text" id="ramVersionsNumber" pattern="[0-9]+$" required>
+        <label for="ramFreqsNumber">ram freqs number</label>
+        <input type="text" id="ramFreqsNumber" pattern="[0-9]+$" required>
+        <label for="motherboardVendorsNumber">motherboards vendor number</label>
+        <input type="text" id="motherboardVendorsNumber" pattern="[0-9]+$" required>
+        <label for="diskVendorsNumber">disk vendors number</label>
+        <input type="text" id="diskVendorsNumber" pattern="[0-9]+$" required>
+        <label for="socketsNumber">sockets number</label>
+        <input type="text" id="socketsNumber" pattern="[0-9]+$" required>
+        <label for="videoInterfacesNumber">video interfaces number</label>
+        <input type="text" id="videoInterfacesNumber" pattern="[0-9]+$" required>
+        <label for="diskInterfacesNumber">disk interfaces number</label>
+        <input type="text" id="diskInterfacesNumber" pattern="[0-9]+$" required>
+        <label for="ordersNumber">orders number</label>
+        <input type="text" id="ordersNumber" pattern="[0-9]+$" required>
+    </div>
+    <div class="submit-button">
+        <input type="submit" value="generate" onclick="readParams()">
+    </div>
+</form>
+</body>
+</html>
