@@ -52,9 +52,8 @@ public class Items {
     orders.remove(order);
   }
 
-  public Items(long price, String name, boolean available) {
+  public Items(long price, boolean available) {
     this.price = price;
-    this.name = name;
     this.available = available;
     orders = new HashSet<>();
   }

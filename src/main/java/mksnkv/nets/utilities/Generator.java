@@ -35,6 +35,8 @@ public class Generator {
     private final ConfigurationsRepo configurationsRepo;
     private final OrdersRepo ordersRepo;
 
+    private final StringRandomizer randomizer = StringRandomizer.INSTANCE;
+
     private final int cpusNumber;
     private final int ramsNumber;
     private final int gpusNumber;
@@ -312,6 +314,7 @@ public class Generator {
             ram.setVendorId(ramVendor);
 
             Items item = entityGenerator.generateItem();
+            item.setName(ram.getName());
             ram.setItem(item);
 
             itemsList.add(item);
@@ -361,6 +364,7 @@ public class Generator {
             gpu.setVideoInterfaceId(videoInterface);
 
             Items item = entityGenerator.generateItem();
+            item.setName(gpu.getName());
             gpu.setItem(item);
 
             gpusList.add(gpu);
@@ -408,6 +412,7 @@ public class Generator {
             cpu.setSocketId(socket);
 
             Items item = entityGenerator.generateItem();
+            item.setName(cpu.getName());
             cpu.setItem(item);
 
             cpusList.add(cpu);
@@ -441,6 +446,7 @@ public class Generator {
             psu.setVendorId(psuVendorsList.get(random.nextInt(psuVendorsList.size())));
 
             Items item = entityGenerator.generateItem();
+            item.setName(psu.getName());
             psu.setItem(item);
 
             psusList.add(psu);
@@ -461,6 +467,7 @@ public class Generator {
             Cases caseObj = entityGenerator.generateCase();
             casesList.add(caseObj);
             Items item = entityGenerator.generateItem();
+            item.setName(caseObj.getName());
             caseObj.setItem(item);
             tempItems.add(item);
         }
@@ -501,6 +508,7 @@ public class Generator {
             disk.setInterfaceId(diskInterfacesList.get(random.nextInt(diskInterfacesList.size())));
 
             Items item = entityGenerator.generateItem();
+            item.setName(disk.getName());
             disk.setItem(item);
 
             tempItems.add(item);
@@ -535,6 +543,7 @@ public class Generator {
             motherboard.setVideoInterfaceId(videoInterfacesList.get(random.nextInt(videoInterfacesList.size())));
 
             Items item = entityGenerator.generateItem();
+            item.setName(motherboard.getName());
             motherboard.setItem(item);
 
             tempItems.add(item);
@@ -548,7 +557,7 @@ public class Generator {
         for (Cpus cpu : cpusList) {
             for (Motherboards motherboard : motherboardsList) {
                 if (cpu.getSocketId() == motherboard.getSocketId()
-                && cpu.getMaxRamFreqId() == motherboard.getMaxRamFreqId()) {
+                    && cpu.getMaxRamFreqId() == motherboard.getMaxRamFreqId()) {
                     cpu.addMotherboard(motherboard);
                 }
             }
@@ -566,7 +575,12 @@ public class Generator {
             Cpus cpu = cpusList.get(random.nextInt(cpusList.size()));
             Psus psu = psusList.get(random.nextInt(psusList.size()));
             Cases caseObj = casesList.get(random.nextInt(casesList.size()));
-            int rand = random.nextInt(cpu.getMotherboards().size());
+            int rand;
+            if (cpu.getMotherboards().size() > 0) {
+                rand = random.nextInt(cpu.getMotherboards().size());
+            } else {
+                continue;
+            }
             int j = 0;
             Motherboards motherboard = null;
             for (Motherboards moth : cpu.getMotherboards()) {
@@ -597,6 +611,7 @@ public class Generator {
             configuration.setRamId(ram.getItem());
 
             Items item = entityGenerator.generateItem();
+            item.setName(randomizer.generateRandomString(15));//TODO
             tempItems.add(item);
 
             configuration.setItem(item);

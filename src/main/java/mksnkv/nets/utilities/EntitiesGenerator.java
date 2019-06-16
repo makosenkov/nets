@@ -67,7 +67,7 @@ class EntitiesGenerator {
 
     Cases generateCase() {
         Cases entity = new Cases();
-        entity.setName(randomizer.generateRandomString(15));
+        entity.setName("Case " + randomizer.generateRandomString(15));
         entity.setConfigurations(new HashSet<>());
         return entity;
     }
@@ -86,7 +86,7 @@ class EntitiesGenerator {
 
     Cpus generateCpu() {
         Cpus entity = new Cpus();
-        entity.setName(randomizer.generateRandomString(15));
+        entity.setName("CPU " + randomizer.generateRandomString(15));
         entity.setPower(random.nextInt(100) + 50);
         entity.setConfigurations(new HashSet<>());
         entity.setMotherboards(new HashSet<>());
@@ -95,7 +95,7 @@ class EntitiesGenerator {
 
     Gpus generateGpu() {
         Gpus entity = new Gpus();
-        entity.setName(randomizer.generateRandomString(15));
+        entity.setName("GPU " + randomizer.generateRandomString(15));
         entity.setPower(random.nextInt(500) + 200);
         entity.setConfigurations(new HashSet<>());
         return entity;
@@ -103,7 +103,7 @@ class EntitiesGenerator {
 
     Psus generatePsu() {
         Psus entity = new Psus();
-        entity.setName(randomizer.generateRandomString(15));
+        entity.setName("PSU " + randomizer.generateRandomString(15));
         entity.setPowerRate(random.nextInt(1500) + 500);
         entity.setConfigurations(new HashSet<>());
         return entity;
@@ -111,7 +111,7 @@ class EntitiesGenerator {
 
     Disks generateDisk() {
         Disks entity = new Disks();
-        entity.setName(randomizer.generateRandomString(15));
+        entity.setName("Disk " + randomizer.generateRandomString(15));
         entity.setPower(random.nextInt(300) + 200);
         entity.setArchitecture(randomizer.generateRandomString(15));
         entity.setConfigurations(new HashSet<>());
@@ -120,7 +120,7 @@ class EntitiesGenerator {
 
     Rams generateRam() {
         Rams entity = new Rams();
-        entity.setName(randomizer.generateRandomString(15));
+        entity.setName("Ram " + randomizer.generateRandomString(15));
         entity.setPower(random.nextInt(50) + 10);
         entity.setConfigurations(new HashSet<>());
         return entity;
@@ -132,7 +132,7 @@ class EntitiesGenerator {
 
     Motherboards generateMotherboard() {
         Motherboards entity = new Motherboards();
-        entity.setName(randomizer.generateRandomString(15));
+        entity.setName("Motherboard " + randomizer.generateRandomString(15));
         entity.setConfigurations(new HashSet<>());
         entity.setCpus(new HashSet<>());
         return entity;
@@ -141,7 +141,6 @@ class EntitiesGenerator {
     Items generateItem() {
         return new Items(
             random.nextInt(25000),
-            randomizer.generateRandomString(15),
             random.nextBoolean()
         );
     }

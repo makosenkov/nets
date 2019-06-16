@@ -2,12 +2,12 @@ package mksnkv.nets.controllers;
 
 import lombok.AllArgsConstructor;
 import mksnkv.nets.entities.GpuVendors;
-import mksnkv.nets.entities.Rams;
 import mksnkv.nets.repos.*;
 import mksnkv.nets.utilities.ConfigLoader;
 import mksnkv.nets.utilities.DataConfig;
 import mksnkv.nets.utilities.Generator;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,17 +41,20 @@ public class EntitiesController {
     private final ConfigurationsRepo configurationsRepo;
     private final OrdersRepo ordersRepo;
 
+    //List<Items> itemsList;
 
-    @GetMapping("/rams")
-    public List<Rams> listRams() {
-        return ramsRepo.findAll();
+/*    @Scheduled(fixedDelay = 5)
+    void refreshItems() {
+        itemsList = itemsRepo.findAll();
+    }*/
+
+    @GetMapping("/items")
+    public String listItems(Model model) {
+        model.addAttribute("items", itemsRepo.findAll());
+        model.addAttribute("count", itemsRepo.findAll().size());
+        return "table";
     }
-/*
-    @GetMapping("/")
-    public List<Configurations> listConfigurations() {
-        return configurationsRepo.findAll();
-    }
-*/
+
     @GetMapping("/cpus")
     public long listCpus() {
         return cpusRepo.count();
@@ -62,21 +65,18 @@ public class EntitiesController {
         return gpuVendorsRepo.findAll();
     }
 
-    /*
-    @GetMapping("/generator")
-    public String generateData() {
-        generate();
-        return "method generate() was called, wait several minutes to see the data";
+    @RequestMapping(value = {"/", "/home"},  method = RequestMethod.GET)
+    public String homePage(){
+        return "home";
     }
-*/
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/generatorPage", method = RequestMethod.GET)
     public String generatorPage(){
-        return "generatorPage";
+        return "generator";
     }
 
     @RequestMapping(value = "/generator")
-    void generateV(@RequestParam int cpuVendorsNumber,
+    public void generateV(@RequestParam int cpuVendorsNumber,
                    @RequestParam int gpuVendorsNumber,
                    @RequestParam int ramVendorsNumber,
                    @RequestParam int ramVersionsNumber,

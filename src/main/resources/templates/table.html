@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link href="../static/css/table.css" rel="stylesheet">
+    <link href="/css/table.css" rel="stylesheet">
     <title>Title</title>
 </head>
 <body>
 <table class="item-table" border="1">
     <caption>Items</caption>
     <tr>
-        <td>id</td>
         <td>item</td>
         <td>price</td>
+        <td>available</td>
+    </tr>
+    <tr class="item" th:each="item: ${items}">
+        <td th:utext="${item.getName()}"></td>
+        <td th:utext="${item.getPrice()}"></td>
+        <td th:utext="${item.getAvailable()}"></td>
     </tr>
 </table>
 </body>
