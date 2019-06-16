@@ -630,8 +630,11 @@ public class Generator {
             for (int j = 0; j < random.nextInt(3); j++) {
                 Items item = itemsList.get(random.nextInt(itemsList.size()));
                 order.addItem(item);
-                item.addOrder(order);
                 order.setTotalPrice(order.getTotalPrice() + item.getPrice());
+            }
+            if (order.getTotalPrice() == 0) {
+                i--;
+                continue;
             }
             ordersList.add(order);
         }
