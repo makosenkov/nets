@@ -2,6 +2,35 @@
     box-sizing: border-box;
 }
 
+.fieldset {
+    max-width: 350px;
+    margin: 50px auto 0;
+    padding: 2px;
+    background: #FAAB1B;
+    font-family: 'Oswald', sans-serif;
+    color: #600000;
+    border-color: #600000;
+}
+
+.fieldset label, input {
+    display: table;
+}
+
+.submit-button {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #FAAB1B;
+}
+
+.submit-button input {
+    padding: 0;
+    background: #FAAB1B;
+    border-width: 0;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+
 .item-table {
     max-width: 350px;
     margin: 50px auto 0;

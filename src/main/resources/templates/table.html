@@ -3,21 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <link href="/css/table.css" rel="stylesheet">
+    <script src="/js/scriptFilters.js"></script>
     <title>Title</title>
 </head>
 <body>
-<table class="item-table" border="1">
-    <caption>Items</caption>
-    <tr>
-        <td>item</td>
-        <td>price</td>
-        <td>available</td>
-    </tr>
-    <tr class="item" th:each="item: ${items}">
-        <td th:utext="${item.getName()}"></td>
-        <td th:utext="${item.getPrice()}"></td>
-        <td th:utext="${item.getAvailable()}"></td>
-    </tr>
-</table>
+<div class="fieldset">
+    <label for="popular">Popular first</label>
+    <input type="checkbox" id="popular" checked>
+    <label for="price">Price from high to low</label>
+    <input type="checkbox" id="price" >
+    <label for="available">Only available</label>
+    <input type="checkbox" id="available">
+    <div class="submit-button">
+        <input type="submit" value="submit filters" onclick="readParams()">
+    </div>
+</div>
+    <table class="item-table" border="1">
+        <caption>Items</caption>
+
+        <tr>
+            <td>item</td>
+            <td>price</td>
+            <td>available</td>
+        </tr>
+        <tr class="item" th:each="item: ${items}">
+            <td th:utext="${item.getName()}"></td>
+            <td th:utext="${item.getPrice()}"></td>
+            <td th:utext="${item.getAvailable()}"></td>
+        </tr>
+    </table>
 </body>
 </html>

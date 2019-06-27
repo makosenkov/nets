@@ -1,7 +1,7 @@
 package mksnkv.nets.controllers;
 
 import lombok.AllArgsConstructor;
-import mksnkv.nets.entities.GpuVendors;
+import mksnkv.nets.entities.Items;
 import mksnkv.nets.repos.*;
 import mksnkv.nets.utilities.ConfigLoader;
 import mksnkv.nets.utilities.DataConfig;
@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -41,13 +43,6 @@ public class EntitiesController {
     private final ConfigurationsRepo configurationsRepo;
     private final OrdersRepo ordersRepo;
 
-    //List<Items> itemsList;
-
-/*    @Scheduled(fixedDelay = 5)
-    void refreshItems() {
-        itemsList = itemsRepo.findAll();
-    }*/
-
     @GetMapping("/items")
     public String listItems(Model model) {
         model.addAttribute("items", itemsRepo.findAll());
@@ -55,47 +50,57 @@ public class EntitiesController {
         return "table";
     }
 
-    @GetMapping("/cpus")
-    public long listCpus() {
-        return cpusRepo.count();
+    @GetMapping(value = "/filtering")
+    public String filtering(@RequestParam boolean popular,
+                            @RequestParam boolean price,
+                            @RequestParam boolean available,
+                            Model model) {
+        List<Items> items = itemsRepo.findAll();
+        if (available) {
+            items = items.stream().filter(Items::getAvailable).collect(Collectors.toList());
+        }
+        if (price) {
+            items = items.stream().sorted(Comparator.comparingLong(Items::getPrice)).collect(Collectors.toList());
+        }
+        if (popular) {
+            items = items.stream().sorted(Comparator.comparingInt(o -> o.getOrders().size())).collect(Collectors.toList());
+        }
+        model.addAttribute("items", items);
+        model.addAttribute("count", items.size());
+        return "table";
     }
 
-    @GetMapping("/gpuvendors")
-    public List<GpuVendors> listGpuVendors() {
-        return gpuVendorsRepo.findAll();
-    }
-
-    @RequestMapping(value = {"/", "/home"},  method = RequestMethod.GET)
-    public String homePage(){
+    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
+    public String homePage() {
         return "home";
     }
 
     @RequestMapping(value = "/generatorPage", method = RequestMethod.GET)
-    public String generatorPage(){
+    public String generatorPage() {
         return "generator";
     }
 
     @RequestMapping(value = "/generator")
     public void generateV(@RequestParam int cpuVendorsNumber,
-                   @RequestParam int gpuVendorsNumber,
-                   @RequestParam int ramVendorsNumber,
-                   @RequestParam int ramVersionsNumber,
-                   @RequestParam int ramFreqsNumber,
-                   @RequestParam int psuVendorsNumber,
-                   @RequestParam int diskVendorsNumber,
-                   @RequestParam int diskInterfacesNumber,
-                   @RequestParam int socketsNumber,
-                   @RequestParam int videoInterfacesNumber,
-                   @RequestParam int motherboardsNumber,
-                   @RequestParam int motherboardVendorsNumber,
-                   @RequestParam int cpusNumber,
-                   @RequestParam int gpusNumber,
-                   @RequestParam int psusNumber,
-                   @RequestParam int ramsNumber,
-                   @RequestParam int casesNumber,
-                   @RequestParam int disksNumber,
-                   @RequestParam int configurationsNumber,
-                   @RequestParam int ordersNumber) {
+                          @RequestParam int gpuVendorsNumber,
+                          @RequestParam int ramVendorsNumber,
+                          @RequestParam int ramVersionsNumber,
+                          @RequestParam int ramFreqsNumber,
+                          @RequestParam int psuVendorsNumber,
+                          @RequestParam int diskVendorsNumber,
+                          @RequestParam int diskInterfacesNumber,
+                          @RequestParam int socketsNumber,
+                          @RequestParam int videoInterfacesNumber,
+                          @RequestParam int motherboardsNumber,
+                          @RequestParam int motherboardVendorsNumber,
+                          @RequestParam int cpusNumber,
+                          @RequestParam int gpusNumber,
+                          @RequestParam int psusNumber,
+                          @RequestParam int ramsNumber,
+                          @RequestParam int casesNumber,
+                          @RequestParam int disksNumber,
+                          @RequestParam int configurationsNumber,
+                          @RequestParam int ordersNumber) {
         Generator generator = new Generator(itemsRepo,
             cpuVendorsRepo,
             gpuVendorsRepo,
@@ -142,7 +147,7 @@ public class EntitiesController {
     }
 
     public void generate() {
-        DataConfig config = ConfigLoader.getInstance().getDataObject("/home/mksnkv/dev/nets/src/main/resources/config.properties");
+        DataConfig config = ConfigLoader.getInstance().getDataObject("config.properties");
         Generator generator = new Generator(itemsRepo,
             cpuVendorsRepo,
             gpuVendorsRepo,

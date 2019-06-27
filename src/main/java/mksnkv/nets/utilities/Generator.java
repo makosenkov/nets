@@ -125,27 +125,27 @@ public class Generator {
         this.videoInterfacesNumber = videoInterfacesNumber;
         this.diskInterfacesNumber = diskInterfacesNumber;
         this.ordersNumber = ordersNumber;
-        this.videoInterfacesList = new ArrayList<>();
-        this.socketsList = new ArrayList<>();
-        this.ramFreqsList = new ArrayList<>();
-        this.ramVersionsList = new ArrayList<>();
-        this.psusList = new ArrayList<>();
-        this.ramVendorsList = new ArrayList<>();
-        this.ramsList = new ArrayList<>();
-        this.gpuVendorsList = new ArrayList<>();
-        this.gpusList = new ArrayList<>();
-        this.cpuVendorsList = new ArrayList<>();
-        this.cpusList = new ArrayList<>();
-        this.psuVendorsList = new ArrayList<>();
-        this.casesList = new ArrayList<>();
-        this.diskInterfacesList = new ArrayList<>();
-        this.diskVendorsList = new ArrayList<>();
-        this.disksList = new ArrayList<>();
-        this.motherboardVendorsList = new ArrayList<>();
-        this.motherboardsList = new ArrayList<>();
-        this.itemsList = new ArrayList<>();
-        this.configurationsList = new ArrayList<>();
-        this.ordersList = new ArrayList<>();
+        this.videoInterfacesList = videoInterfacesRepo.findAll();
+        this.socketsList = socketsRepo.findAll();
+        this.ramFreqsList = ramFreqsRepo.findAll();
+        this.ramVersionsList = ramVersionsRepo.findAll();
+        this.psusList = psusRepo.findAll();
+        this.ramVendorsList =ramVendorsRepo.findAll();
+        this.ramsList = ramsRepo.findAll();
+        this.gpuVendorsList = gpuVendorsRepo.findAll();
+        this.gpusList = gpusRepo.findAll();
+        this.cpuVendorsList = cpuVendorsRepo.findAll();
+        this.cpusList = cpusRepo.findAll();
+        this.psuVendorsList = psuVendorsRepo.findAll();
+        this.casesList = casesRepo.findAll();
+        this.diskInterfacesList = diskInterfacesRepo.findAll();
+        this.diskVendorsList = diskVendorsRepo.findAll();
+        this.disksList = disksRepo.findAll();
+        this.motherboardVendorsList = motherboardVendorsRepo.findAll();
+        this.motherboardsList = motherboardsRepo.findAll();
+        this.itemsList = itemsRepo.findAll();
+        this.configurationsList = configurationsRepo.findAll();
+        this.ordersList = ordersRepo.findAll();
     }
 
     public Generator(ItemsRepo itemsRepo,
@@ -594,11 +594,9 @@ public class Generator {
             }
             Motherboards finalMotherboard = motherboard;
             Gpus gpu = gpusList.stream()
-                .filter(gpus -> gpus.getVideoInterfaceId() == finalMotherboard.getVideoInterfaceId())
                 .findAny()
                 .orElseThrow(NullPointerException::new);
             Disks disk = disksList.stream()
-                .filter(disks -> disks.getInterfaceId() == finalMotherboard.getDiskInterfaceId())
                 .findAny()
                 .orElseThrow(NullPointerException::new);
             Rams ram = ramsList.get(random.nextInt(ramsList.size()));
@@ -624,17 +622,13 @@ public class Generator {
 
     void generateOrders() {
         int i = 0;
+        itemsList = itemsRepo.findAll();
         while (i < ordersNumber) {
             i++;
             Orders order = entityGenerator.generateOrder();
-            for (int j = 0; j < random.nextInt(3); j++) {
-                Items item = itemsList.get(random.nextInt(itemsList.size()));
+            for (int j = 0; j < random.nextInt(5); j++) {
+                Items item = configurationsList.get(random.nextInt(configurationsList.size())).getItem();
                 order.addItem(item);
-                order.setTotalPrice(order.getTotalPrice() + item.getPrice());
-            }
-            if (order.getTotalPrice() == 0) {
-                i--;
-                continue;
             }
             ordersList.add(order);
         }
