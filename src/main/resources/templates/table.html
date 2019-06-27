@@ -2,35 +2,32 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link href="/css/table.css" rel="stylesheet">
-    <script src="/js/scriptFilters.js"></script>
+    <link href="/css/table.css?ver<%=DateTime.Now.Ticks.ToString()%>" rel="stylesheet">
+    <script src=" /js/scriptFilters.js?ver<%=DateTime.Now.Ticks.ToString()%>" type="text/javascript"></script>
     <title>Title</title>
 </head>
 <body>
 <div class="fieldset">
-    <label for="popular">Popular first</label>
-    <input type="checkbox" id="popular" checked>
-    <label for="price">Price from high to low</label>
-    <input type="checkbox" id="price" >
-    <label for="available">Only available</label>
-    <input type="checkbox" id="available">
-    <div class="submit-button">
-        <input type="submit" value="submit filters" onclick="readParams()">
-    </div>
-</div>
-    <table class="item-table" border="1">
-        <caption>Items</caption>
+        <button id="priceLow" name="pricelow" onclick="sortTable('asc')">Low first</button>
+        <button id="priceHigh" name="pricehigh" onclick="sortTable('desc')">High first</button>
+        <button id="available" name="available" onclick="filterAvailable()">Only available</button>
+        <button id="unavailable" name="unavailable" onclick="filterUnavailable()">Only unavailable</button>
+        <button id="all" name="all" onclick="filterAll()">SBROSIT</button>
 
-        <tr>
-            <td>item</td>
-            <td>price</td>
-            <td>available</td>
-        </tr>
-        <tr class="item" th:each="item: ${items}">
-            <td th:utext="${item.getName()}"></td>
-            <td th:utext="${item.getPrice()}"></td>
-            <td th:utext="${item.getAvailable()}"></td>
-        </tr>
-    </table>
+</div>
+<table class="item-table" border="1">
+    <caption>Items</caption>
+
+    <tr>
+        <td>item</td>
+        <td>price</td>
+        <td>available</td>
+    </tr>
+    <tr class="item" th:each="item: ${items}" th:classappend="${item.getAvailable()==true} ? available : unavailable">
+        <td th:utext="${item.getName()}"></td>
+        <td th:utext="${item.getPrice()}"></td>
+        <td th:utext="${item.getAvailable()}"></td>
+    </tr>
+</table>
 </body>
 </html>

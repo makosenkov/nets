@@ -45,14 +45,14 @@ public class EntitiesController {
 
     @GetMapping("/items")
     public String listItems(Model model) {
-        model.addAttribute("items", itemsRepo.findAll());
-        model.addAttribute("count", itemsRepo.findAll().size());
+        List<Items> items = itemsRepo.findAll();
+        model.addAttribute("items", items);
+        model.addAttribute("count", items.size());
         return "table";
     }
 
-    @GetMapping(value = "/filtering")
-    public String filtering(@RequestParam boolean popular,
-                            @RequestParam boolean price,
+    @RequestMapping(value = "/filtering")
+    public String filtering(@RequestParam boolean price,
                             @RequestParam boolean available,
                             Model model) {
         List<Items> items = itemsRepo.findAll();
@@ -61,9 +61,6 @@ public class EntitiesController {
         }
         if (price) {
             items = items.stream().sorted(Comparator.comparingLong(Items::getPrice)).collect(Collectors.toList());
-        }
-        if (popular) {
-            items = items.stream().sorted(Comparator.comparingInt(o -> o.getOrders().size())).collect(Collectors.toList());
         }
         model.addAttribute("items", items);
         model.addAttribute("count", items.size());
